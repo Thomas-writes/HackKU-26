@@ -38,7 +38,7 @@ body {
 }
 
 .page {
-  max-width: 1040px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 24px 16px 48px;
 }
@@ -97,11 +97,16 @@ body {
   padding: 16px;
   background: var(--parchment-cream);
   position: relative;
+  margin-right: 320px;
 }
 
 .goblin-hud {
-  position: relative;
-  margin-bottom: 14px;
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 284px;
+  z-index: 20;
   padding: 14px;
   background: var(--aged-scroll);
 }
@@ -109,8 +114,7 @@ body {
 .goblin-banner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
   background: var(--goblin-shadow);
   color: var(--pixel-white);
   border: 4px solid var(--shadow-black);
@@ -118,32 +122,23 @@ body {
   padding: 10px 12px;
 }
 
-.goblin-kicker,
-.goblin-counter {
+.goblin-kicker {
   font-size: 0.5rem;
   line-height: 1.6;
 }
 
 .goblin-kicker {
   color: var(--gold-coin);
-  margin-bottom: 4px;
-}
-
-.goblin-caption {
-  font-size: 0.42rem;
-  line-height: 1.6;
-}
-
-.goblin-caption-tight {
-  color: var(--stone-gray);
+  margin: 0;
 }
 
 .goblin-health {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  flex-wrap: nowrap;
+  justify-content: center;
   gap: 6px;
-  max-width: 280px;
+  width: 100%;
+  overflow: hidden;
 }
 
 .goblin-heart {
@@ -166,10 +161,9 @@ body {
 }
 
 .goblin-battlefield {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
   margin-top: 12px;
 }
 
@@ -290,12 +284,6 @@ body {
 .goblin-art.defeated {
   filter: grayscale(1);
   opacity: 0.75;
-}
-
-.goblin-status {
-  display: grid;
-  gap: 8px;
-  min-width: 220px;
 }
 
 .sword-layer {
@@ -813,6 +801,17 @@ body {
 }
 
 @media (max-width: 720px) {
+  .main {
+    margin-right: 0;
+  }
+
+  .goblin-hud {
+    position: static;
+    transform: none;
+    width: 100%;
+    margin-bottom: 14px;
+  }
+
   .brand {
     font-size: 0.6rem;
   }

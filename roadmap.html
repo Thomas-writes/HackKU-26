@@ -265,20 +265,41 @@
 		.path {
 			position: absolute;
 			top: 0;
-			left: 50%;
-			width: 8px;
+			left: 0;
+			width: 100%;
 			height: 100%;
-			transform: translateX(-50%);
-			background: repeating-linear-gradient(
-				to bottom,
-				#1d2f4e,
-				#1d2f4e 18px,
-				#385482 18px,
-				#385482 36px
-			);
-			border-left: 3px solid #000;
-			border-right: 3px solid #000;
+			pointer-events: none;
 			z-index: 1;
+		}
+
+		.path svg {
+			width: 100%;
+			height: 100%;
+			display: block;
+		}
+
+		.road-spline-under {
+			stroke: #000;
+			stroke-width: 34;
+			fill: none;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.road-spline-main {
+			stroke: #c99664;
+			stroke-width: 26;
+			fill: none;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+		}
+
+		.road-spline-dots {
+			stroke: #8b603a;
+			stroke-width: 5;
+			fill: none;
+			stroke-linecap: round;
+			stroke-dasharray: 2 16;
 		}
 
 		.lesson {
@@ -308,11 +329,13 @@
 		.node {
 			width: min(310px, 90%);
 			border: 4px solid #000;
-			box-shadow: 0 6px 0 #000;
+			box-shadow: 0 8px 0 #000;
 			background: #2a3f62;
 			padding: 12px;
 			cursor: pointer;
 			transition: transform 0.13s ease;
+			position: relative;
+			z-index: 4;
 		}
 
 		.node:hover {
@@ -433,6 +456,38 @@
 			animation-delay: calc(var(--i, 0) * 0.06s);
 		}
 
+		.knight-marker {
+			position: absolute;
+			top: 50%;
+			width: 120px;
+			height: 120px;
+			object-fit: contain;
+			image-rendering: pixelated;
+			z-index: 5;
+			border: none !important;
+			box-shadow: none !important;
+			background: transparent !important;
+			filter: drop-shadow(6px 6px 0 #000) !important;
+			animation: knightBob 1.2s steps(2, end) infinite;
+		}
+
+		.lesson.left .knight-marker,
+		.lesson.center .knight-marker {
+			right: 140px;
+			transform: translateY(-50%);
+		}
+
+		.lesson.right .knight-marker {
+			left: 140px;
+			transform: translateY(-50%) scaleX(-1);
+		}
+
+		@keyframes knightBob {
+			0% { margin-top: -2px; }
+			50% { margin-top: 2px; }
+			100% { margin-top: -2px; }
+		}
+
 		@media (max-width: 940px) {
 			.layout {
 				grid-template-columns: 1fr;
@@ -459,6 +514,14 @@
 				justify-content: center;
 				padding-left: 0;
 				padding-right: 0;
+			}
+
+			.lesson .knight-marker {
+				left: auto;
+				right: -96px;
+				width: 88px;
+				height: 88px;
+				transform: translateY(-50%);
 			}
 
 			.path {
@@ -500,6 +563,10 @@
 			animation: none !important;
 			transition: none !important;
 			text-shadow: none !important;
+		}
+
+		.knight-marker {
+			animation: knightBob 1.2s steps(2, end) infinite !important;
 		}
 
 		body {
@@ -565,6 +632,12 @@
 			color: var(--pixel-white) !important;
 		}
 
+		.node.open,
+		.tiny-node.open {
+			background: var(--gold-coin) !important;
+			color: var(--shadow-black) !important;
+		}
+
 		.node.locked,
 		.tiny-node.locked {
 			background: var(--stone-gray) !important;
@@ -572,7 +645,6 @@
 			filter: none !important;
 		}
 
-		.path,
 		.xp-meter {
 			background: var(--ancient-paper) !important;
 		}
@@ -684,6 +756,7 @@
 		];
 
 		const pattern = ["center", "left", "right", "left", "center", "right"];
+		const progressKey = "taxquest-progress-v1";
 		let currentTrack = tracks[0];
 		let xp = 120;
 
@@ -727,6 +800,49 @@
 			investor1099b: "levels/investor1099b-level-1.html"
 		};
 
+		function readProgress() {
+			try {
+				return JSON.parse(window.localStorage.getItem(progressKey) || "{}");
+			} catch (_err) {
+				return {};
+			}
+		}
+
+		function levelFile(trackKey, index) {
+			const url = trackLessonUrls[trackKey]?.[index] || "";
+			return url.split("/").pop();
+		}
+
+		function isLevelDone(trackKey, index) {
+			const file = levelFile(trackKey, index);
+			if (!file) return false;
+			const progress = readProgress();
+			return Boolean(progress[file] && progress[file].completed);
+		}
+
+		function lessonState(trackKey, index) {
+			if (isLevelDone(trackKey, index)) {
+				return "done";
+			}
+
+			if (index === 0) {
+				return "open";
+			}
+
+			return isLevelDone(trackKey, index - 1) ? "open" : "locked";
+		}
+
+		function nextTrackUrl(trackKey) {
+			const urls = trackLessonUrls[trackKey] || [];
+			for (let index = 0; index < urls.length; index += 1) {
+				const state = lessonState(trackKey, index);
+				if (state === "open") {
+					return urls[index];
+				}
+			}
+			return urls[urls.length - 1] || trackStartMap[trackKey] || "levels/index.html";
+		}
+
 		function drawTracks() {
 			trackList.innerHTML = "";
 			tracks.forEach((track) => {
@@ -746,7 +862,7 @@
 		function drawHeader() {
 			trackTitle.textContent = currentTrack.title;
 			trackDescription.textContent = currentTrack.description;
-			startTrackLink.href = trackStartMap[currentTrack.key] || "levels/index.html";
+			startTrackLink.href = nextTrackUrl(currentTrack.key);
 			focusChips.innerHTML = "";
 			currentTrack.focus.forEach((item) => {
 				const chip = document.createElement("span");
@@ -760,41 +876,115 @@
 			const path = roadmap.querySelector(".path");
 			roadmap.innerHTML = "";
 			roadmap.appendChild(path);
+			const stateList = [];
 
 			currentTrack.lessons.forEach((lesson, index) => {
+				const state = lessonState(currentTrack.key, index);
+				stateList.push(state);
 				const wrap = document.createElement("article");
 				const pos = pattern[index % pattern.length];
 				wrap.className = `lesson ${pos}`;
 
 				const node = document.createElement("button");
 				node.type = "button";
-				node.className = `node ${lesson.state}`;
+				node.className = `node ${state}`;
 				node.style.setProperty("--i", String(index));
-				node.setAttribute("aria-label", `${lesson.title} ${lesson.state}`);
+				node.setAttribute("aria-label", `${lesson.title} ${state}`);
 				const lessonUrl = trackLessonUrls[currentTrack.key]?.[index];
 
 				node.innerHTML = `
 					<div class="node-top">
 						<span class="badge">${lesson.type}</span>
-						<span class="status">${lesson.state.toUpperCase()}</span>
+						<span class="status">${state.toUpperCase()}</span>
 					</div>
 					<h3>${lesson.title}</h3>
 					<p>${lesson.detail}</p>
 				`;
 
 				node.addEventListener("click", () => {
-					if (lesson.state === "locked") {
+					if (state === "locked") {
 						lessonPrompt.textContent = "This lesson is locked. Beat the previous level first!";
 						return;
 					}
 
-						lessonPrompt.textContent = `Opening ${lesson.title}...`;
-						window.location.href = lessonUrl || "levels/index.html";
+					lessonPrompt.textContent = `Opening ${lesson.title}...`;
+					window.location.href = lessonUrl || "levels/index.html";
 				});
 
 				wrap.appendChild(node);
 				roadmap.appendChild(wrap);
 			});
+
+			renderWindingPath();
+			placeKnight(stateList);
+		}
+
+		function renderWindingPath() {
+			const path = roadmap.querySelector(".path");
+			if (!path) return;
+
+			const lessons = Array.from(roadmap.querySelectorAll(".lesson"));
+			if (!lessons.length) {
+				path.innerHTML = "";
+				return;
+			}
+
+			const roadmapRect = roadmap.getBoundingClientRect();
+			const points = lessons.map((lesson) => {
+				const node = lesson.querySelector(".node");
+				const rect = node.getBoundingClientRect();
+				return {
+					x: rect.left - roadmapRect.left + rect.width / 2,
+					y: rect.top - roadmapRect.top + rect.height / 2
+				};
+			});
+
+			if (!points.length) {
+				path.innerHTML = "";
+				return;
+			}
+
+			const tension = 0.28;
+			let d = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+			for (let index = 0; index < points.length - 1; index += 1) {
+				const prev = points[index - 1] || points[index];
+				const current = points[index];
+				const next = points[index + 1];
+				const next2 = points[index + 2] || next;
+
+				const cp1x = current.x + (next.x - prev.x) * tension;
+				const cp1y = current.y + (next.y - prev.y) * tension;
+				const cp2x = next.x - (next2.x - current.x) * tension;
+				const cp2y = next.y - (next2.y - current.y) * tension;
+
+				d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${next.x.toFixed(2)} ${next.y.toFixed(2)}`;
+			}
+
+			path.innerHTML = `
+				<svg viewBox="0 0 ${roadmap.clientWidth} ${roadmap.clientHeight}" preserveAspectRatio="none" aria-hidden="true">
+					<path class="road-spline-under" d="${d}"></path>
+					<path class="road-spline-main" d="${d}"></path>
+					<path class="road-spline-dots" d="${d}"></path>
+				</svg>
+			`;
+		}
+
+		function placeKnight(stateList) {
+			const lessons = Array.from(roadmap.querySelectorAll(".lesson"));
+			if (!lessons.length) return;
+
+			let targetIndex = stateList.findIndex((state) => state === "open");
+			if (targetIndex < 0) {
+				targetIndex = stateList.length - 1;
+			}
+
+			if (targetIndex < 0 || !lessons[targetIndex]) return;
+
+			const knight = document.createElement("img");
+			knight.className = "knight-marker";
+			knight.src = "knight.png";
+			knight.alt = "Knight marker";
+			lessons[targetIndex].appendChild(knight);
 		}
 
 		function updateXP() {
@@ -806,7 +996,12 @@
 		drawTracks();
 		drawHeader();
 		drawRoadmap();
+		lessonPrompt.textContent = "Open lessons are gold. Completed lessons are green. Finish a level to unlock the next.";
 		updateXP();
+
+		window.addEventListener("resize", () => {
+			renderWindingPath();
+		});
 	</script>
 </body>
 </html>

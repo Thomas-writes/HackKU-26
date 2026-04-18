@@ -7,6 +7,8 @@
   const finalCard = panelList[1];
   const mainElement = document.querySelector(".main");
   const gridSection = document.querySelector(".grid");
+  const pageElement = document.querySelector(".page");
+  const progressKey = "taxquest-progress-v1";
 
   questionCard.classList.add("question-card");
   finalCard.classList.add("tax-form-card");
@@ -33,13 +35,10 @@
   goblinHud.className = "goblin-hud pixel-panel";
   goblinHud.innerHTML = `
     <div class="goblin-banner">
-      <div>
-        <p class="goblin-kicker">BOSS GOBLIN</p>
-        <p class="goblin-caption">One heart disappears for every correct answer.</p>
-      </div>
-      <div class="goblin-health" id="goblinHealth"></div>
+      <p class="goblin-kicker">BOSS GOBLIN</p>
     </div>
     <div class="goblin-battlefield">
+      <div class="goblin-health" id="goblinHealth"></div>
       <div class="goblin-art" id="goblinArt" aria-hidden="true">
         <span class="goblin-flash"></span>
         <span class="goblin-ear goblin-ear-left"></span>
@@ -49,21 +48,16 @@
         <span class="goblin-nose"></span>
         <span class="goblin-mouth"></span>
       </div>
-      <div class="goblin-status">
-        <p class="goblin-counter" id="goblinCounter"></p>
-        <p class="goblin-caption goblin-caption-tight">Crack his armor by clearing every question.</p>
-      </div>
     </div>
   `;
 
-  if (mainElement && gridSection) {
-    mainElement.insertBefore(goblinHud, gridSection);
+  if (pageElement) {
+    pageElement.appendChild(goblinHud);
   }
 
   const goblinHealth = goblinHud.querySelector("#goblinHealth");
   const goblinArt = goblinHud.querySelector("#goblinArt");
   const goblinFlash = goblinHud.querySelector(".goblin-flash");
-  const goblinCounter = goblinHud.querySelector("#goblinCounter");
   const swordLayer = document.createElement("div");
   swordLayer.className = "sword-layer";
   swordLayer.style.zIndex = "9999";
@@ -114,7 +108,6 @@
       heart.textContent = "♥";
       goblinHealth.appendChild(heart);
     }
-    goblinCounter.textContent = `${goblinHealthRemaining} / ${totalHearts} hearts left`;
   };
 
   const playSwordStrike = (fromElement) => {
@@ -179,6 +172,32 @@
   renderGoblinHealth();
 
   const normalize = (value) => String(value || "").trim().toLowerCase().replace(/\$/g, "").replace(/,/g, "").replace(/\s+/g, " ");
+
+  const readProgress = () => {
+    try {
+      return JSON.parse(window.localStorage.getItem(progressKey) || "{}");
+    } catch (_err) {
+      return {};
+    }
+  };
+
+  const saveProgress = (progress) => {
+    try {
+      window.localStorage.setItem(progressKey, JSON.stringify(progress));
+    } catch (_err) {
+      // Ignore quota/storage errors in private mode.
+    }
+  };
+
+  const markLevelCompleted = () => {
+    if (!data.file) return;
+    const progress = readProgress();
+    progress[data.file] = {
+      completed: true,
+      completedAt: Date.now()
+    };
+    saveProgress(progress);
+  };
 
   const showQuestionCard = () => {
     questionCard.hidden = false;
@@ -394,8 +413,9 @@
     }
 
     finalSubmitted = true;
+    markLevelCompleted();
     damageGoblin();
-    playSlash(finalInput);
+    playSwordStrike(finalInput);
 
     finalInput.disabled = true;
     finalAction.textContent = data.next ? "Next Level" : "Back to Roadmap";
