@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>W-2 Employees Level 5 Boss | TaxQuest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="level-base.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="page">
+    <header class="topbar pixel-panel">
+      <div class="brand">TAXQUEST LEVEL MODE</div>
+      <nav class="nav-links">
+        <a class="pixel-link" href="../roadmap.html">Back to Roadmap</a>
+        <a class="pixel-link alt" href="index.html">All Levels</a>
+      </nav>
+    </header>
+
+    <main class="main pixel-panel">
+      <section class="hero-card">
+        <p class="track" id="track"></p>
+        <h1 class="hero-title" id="levelTitle"></h1>
+        <p class="hero-intro" id="intro"></p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Knowledge Check (2-3 MCQs)</h2>
+          <div id="mcqs"></div>
+          <button id="checkMcq" class="btn" type="button">Check Multiple Choice</button>
+          <p id="mcqFeedback" class="feedback"></p>
+        </article>
+
+        <article class="card">
+          <h2>Final Section Fill</h2>
+          <p class="mcq-q" id="finalPrompt"></p>
+          <div class="final-wrap">
+            <label id="finalInputLabel" for="finalInput"></label>
+            <input id="finalInput" type="text" placeholder="Type your answer..." />
+            <button id="checkFinal" class="btn" type="button" disabled>Check Final Answer</button>
+            <p id="finalResult" class="result">Complete MCQs first to unlock this section.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer class="foot">
+        <a id="prevLink" class="pixel-link alt" href="#">Previous Level</a>
+        <a id="nextLink" class="pixel-link" href="#">Next Level</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>window.LEVEL_DATA = {"file":"w2-level-5.html","track":"W-2 Employees","level":"Level 5 Boss","title":"W-2 Summary Checkpoint","intro":"Before filing, verify that Box 1 wages, Box 2 federal withholding, and state withholding fields were entered correctly. This prevents common refund/balance mistakes.","mcqs":[{"q":"Best final habit before filing:","options":["Recheck imported W-2 boxes","Delete all withholding fields","Change values to round numbers"],"answer":0,"explain":"Verification catches key errors."},{"q":"Withholding fields impact:","options":["Balance due or refund","Your SSN","Your filing deadline date"],"answer":0,"explain":"Payments directly affect your result."},{"q":"W-2 transcription errors can cause:","options":["IRS/state mismatch notices","Automatic filing extension","Guaranteed audit"],"answer":0,"explain":"Mismatches may trigger notices."}],"final":{"prompt":"Final W-2 boss fill: enter combined withholding (federal + state).","label":"Enter Box 2 + Box 17 total:","answers":["2170","$2170","2,170"],"hint":"1,550 + 620 = 2,170 for this sample."},"prev":"w2-level-4.html","next":"self1099-level-1.html"};</script>
+  <script src="level-base.js"></script>
+</body>
+</html>

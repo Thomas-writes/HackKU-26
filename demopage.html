@@ -4,12 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaxQuest Filing Quest Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
+      font-family: 'Press Start 2P', cursive;
     }
 
     :root {
@@ -364,6 +367,60 @@
       .question-title {
         font-size: 1.6rem;
       }
+    }
+
+    /* Unified 8-bit theme overrides */
+    :root {
+      --green: #5ff26e;
+      --green-dark: #39d5ff;
+      --blue: #39d5ff;
+      --yellow: #ffd447;
+      --text: #f5f7ff;
+      --muted: #b8c2dd;
+      --bg: #101820;
+      --card: #162033;
+      --border: #22324f;
+      --shadow: 0 10px 0 rgba(0, 0, 0, 0.35);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 20% 10%, #2f4d7a 0%, transparent 36%),
+        radial-gradient(circle at 80% 30%, #1f9f9f 0%, transparent 31%),
+        linear-gradient(180deg, #1f2a44 0%, #101820 100%);
+      color: var(--text);
+    }
+
+    .sidebar,
+    .main-card,
+    .summary-card,
+    .pill,
+    .lesson-item,
+    .choice,
+    .feedback,
+    .summary-stat {
+      background: var(--card);
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+
+    .small,
+    .question-desc,
+    .feedback .explain,
+    .summary-card p {
+      color: var(--muted);
+    }
+
+    .lesson-tag {
+      background: #22324f;
+      color: #ffd447;
+      border: 2px solid #355383;
+    }
+
+    .btn-secondary {
+      background: #22324f;
+      color: var(--text);
+      border-color: #355383;
     }
   </style>
 </head>

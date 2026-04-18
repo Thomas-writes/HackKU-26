@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>W-2 Employees Level 1 | TaxQuest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="level-base.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="page">
+    <header class="topbar pixel-panel">
+      <div class="brand">TAXQUEST LEVEL MODE</div>
+      <nav class="nav-links">
+        <a class="pixel-link" href="../roadmap.html">Back to Roadmap</a>
+        <a class="pixel-link alt" href="index.html">All Levels</a>
+      </nav>
+    </header>
+
+    <main class="main pixel-panel">
+      <section class="hero-card">
+        <p class="track" id="track"></p>
+        <h1 class="hero-title" id="levelTitle"></h1>
+        <p class="hero-intro" id="intro"></p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Knowledge Check (2-3 MCQs)</h2>
+          <div id="mcqs"></div>
+          <button id="checkMcq" class="btn" type="button">Check Multiple Choice</button>
+          <p id="mcqFeedback" class="feedback"></p>
+        </article>
+
+        <article class="card">
+          <h2>Final Section Fill</h2>
+          <p class="mcq-q" id="finalPrompt"></p>
+          <div class="final-wrap">
+            <label id="finalInputLabel" for="finalInput"></label>
+            <input id="finalInput" type="text" placeholder="Type your answer..." />
+            <button id="checkFinal" class="btn" type="button" disabled>Check Final Answer</button>
+            <p id="finalResult" class="result">Complete MCQs first to unlock this section.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer class="foot">
+        <a id="prevLink" class="pixel-link alt" href="#">Previous Level</a>
+        <a id="nextLink" class="pixel-link" href="#">Next Level</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>window.LEVEL_DATA = {"file":"w2-level-1.html","track":"W-2 Employees","level":"Level 1","title":"W-2 Box 1: Taxable Wages","intro":"Box 1 on Form W-2 shows your taxable federal wages after certain pre-tax reductions. This number is usually lower than gross pay if you contributed to pre-tax benefits.","mcqs":[{"q":"What does Box 1 primarily represent?","options":["Taxable federal wages","State refund amount","Total tax owed"],"answer":0,"explain":"Box 1 is taxable wages for federal income tax."},{"q":"Why might Box 1 be less than your gross salary?","options":["Pre-tax deductions reduce taxable wages","A payroll error always occurred","Because of federal credits"],"answer":0,"explain":"Pre-tax benefits can reduce Box 1 amount."},{"q":"Which document section would use Box 1?","options":["Income section","Dependents section","Signature line"],"answer":0,"explain":"Wages feed into your income section."}],"final":{"prompt":"Fill in the value for taxable wages from W-2 Box 1.","label":"Enter Box 1 taxable wages:","answers":["$18400","18400","18,400"],"hint":"Use 18,400 for this lesson sample."},"prev":"","next":"w2-level-2.html"};</script>
+  <script src="level-base.js"></script>
+</body>
+</html>

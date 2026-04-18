@@ -1,0 +1,802 @@
+<!--- W2 Employees, 1099 Self-Employed, 1099B Investors-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>TaxQuest 8-Bit Roadmap</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+	<style>
+		:root {
+			--bg-deep: #101820;
+			--bg-mid: #1f2a44;
+			--panel: #162033;
+			--panel-hi: #22324f;
+			--pixel-green: #5ff26e;
+			--pixel-mint: #acf39d;
+			--pixel-yellow: #ffd447;
+			--pixel-cyan: #39d5ff;
+			--pixel-orange: #ff9153;
+			--pixel-red: #ff5f6d;
+			--ink: #f5f7ff;
+			--muted: #b8c2dd;
+			--shadow: #0c1120;
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			min-height: 100vh;
+			background:
+				radial-gradient(circle at 20% 10%, #2f4d7a 0%, transparent 36%),
+				radial-gradient(circle at 80% 30%, #1f9f9f 0%, transparent 31%),
+				linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 100%);
+			color: var(--ink);
+			font-family: 'Press Start 2P', cursive;
+			letter-spacing: 0.4px;
+			overflow-x: hidden;
+		}
+
+		.scanlines {
+			position: fixed;
+			inset: 0;
+			pointer-events: none;
+			opacity: 0.11;
+			background-image: linear-gradient(to bottom, transparent 50%, rgba(255, 255, 255, 0.12) 50%);
+			background-size: 100% 4px;
+			z-index: 2;
+		}
+
+		.page {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 24px 20px 56px;
+			position: relative;
+			z-index: 3;
+		}
+
+		.pixel-panel {
+			border: 4px solid #000;
+			box-shadow: 0 8px 0 #000, 0 0 0 4px var(--panel-hi) inset;
+			background: var(--panel);
+		}
+
+		.topbar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 14px;
+			padding: 16px;
+			margin-bottom: 20px;
+			flex-wrap: wrap;
+		}
+
+		.brand {
+			font-family: "Press Start 2P", cursive;
+			font-size: clamp(0.8rem, 2vw, 1rem);
+			color: var(--pixel-green);
+			text-shadow: 3px 3px 0 #000;
+			line-height: 1.5;
+		}
+
+		.xp-wrap {
+			min-width: 240px;
+			flex: 1;
+			max-width: 520px;
+		}
+
+		.meter-label {
+			display: flex;
+			justify-content: space-between;
+			font-size: 1.1rem;
+			margin-bottom: 6px;
+			color: var(--muted);
+		}
+
+		.xp-meter {
+			height: 20px;
+			border: 3px solid #000;
+			background: #0c1426;
+			overflow: hidden;
+			box-shadow: 0 4px 0 #000;
+		}
+
+		.xp-fill {
+			width: 24%;
+			height: 100%;
+			background: repeating-linear-gradient(
+				45deg,
+				var(--pixel-green),
+				var(--pixel-green) 10px,
+				#45ca53 10px,
+				#45ca53 20px
+			);
+			transition: width 0.3s ease;
+		}
+
+		.hud {
+			display: flex;
+			gap: 10px;
+			font-family: "Press Start 2P", cursive;
+			font-size: 0.62rem;
+		}
+
+		.hud-chip {
+			padding: 9px 10px;
+			border: 3px solid #000;
+			box-shadow: 0 4px 0 #000;
+			color: #000;
+		}
+
+		.lives {
+			background: var(--pixel-yellow);
+		}
+
+		.streak {
+			background: var(--pixel-cyan);
+		}
+
+		.layout {
+			display: grid;
+			grid-template-columns: minmax(220px, 290px) 1fr;
+			gap: 18px;
+		}
+
+		.sidebar {
+			padding: 16px;
+			align-self: start;
+			position: sticky;
+			top: 14px;
+		}
+
+		.title {
+			font-family: "Press Start 2P", cursive;
+			font-size: 0.9rem;
+			color: var(--pixel-mint);
+			margin-bottom: 12px;
+			line-height: 1.6;
+		}
+
+		.subtitle {
+			color: var(--muted);
+			font-size: 1.35rem;
+			margin-bottom: 16px;
+		}
+
+		.track-list {
+			display: grid;
+			gap: 10px;
+		}
+
+		.track-btn {
+			width: 100%;
+			text-align: left;
+			border: 3px solid #000;
+			background: #273958;
+			color: var(--ink);
+			box-shadow: 0 4px 0 #000;
+			padding: 10px;
+			cursor: pointer;
+			font-family: "Press Start 2P", cursive;
+			font-size: 0.58rem;
+			line-height: 1.5;
+			transition: transform 0.15s ease;
+		}
+
+		.track-btn:hover,
+		.track-btn.active {
+			transform: translateY(-2px);
+			background: #355383;
+			color: var(--pixel-yellow);
+		}
+
+		.legend {
+			margin-top: 16px;
+			padding-top: 12px;
+			border-top: 3px dashed #3f5683;
+			display: grid;
+			gap: 9px;
+			font-size: 1.2rem;
+			color: var(--muted);
+		}
+
+		.legend-row {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.tiny-node {
+			width: 16px;
+			height: 16px;
+			border: 2px solid #000;
+			box-shadow: 2px 2px 0 #000;
+		}
+
+		.tiny-node.locked {
+			background: #67728d;
+		}
+
+		.tiny-node.open {
+			background: var(--pixel-yellow);
+		}
+
+		.tiny-node.done {
+			background: var(--pixel-green);
+		}
+
+		.main {
+			padding: 16px;
+		}
+
+		.header-card {
+			padding: 16px;
+			margin-bottom: 16px;
+			background: linear-gradient(180deg, #2a3f62 0%, #1f2f49 100%);
+			border: 4px solid #000;
+			box-shadow: 0 6px 0 #000;
+		}
+
+		.header-card h2 {
+			font-family: "Press Start 2P", cursive;
+			font-size: clamp(0.7rem, 1.7vw, 1rem);
+			color: var(--pixel-yellow);
+			margin-bottom: 10px;
+			line-height: 1.7;
+		}
+
+		.header-card p {
+			font-size: 1.35rem;
+			color: var(--muted);
+			max-width: 780px;
+		}
+
+		.roadmap {
+			position: relative;
+			padding: 16px 6px 6px;
+			min-height: 560px;
+		}
+
+		.path {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			width: 8px;
+			height: 100%;
+			transform: translateX(-50%);
+			background: repeating-linear-gradient(
+				to bottom,
+				#1d2f4e,
+				#1d2f4e 18px,
+				#385482 18px,
+				#385482 36px
+			);
+			border-left: 3px solid #000;
+			border-right: 3px solid #000;
+			z-index: 1;
+		}
+
+		.lesson {
+			position: relative;
+			z-index: 3;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			margin: 16px 0;
+			min-height: 92px;
+		}
+
+		.lesson.left {
+			justify-content: flex-start;
+			padding-left: 8%;
+		}
+
+		.lesson.right {
+			justify-content: flex-end;
+			padding-right: 8%;
+		}
+
+		.lesson.center {
+			justify-content: center;
+		}
+
+		.node {
+			width: min(310px, 90%);
+			border: 4px solid #000;
+			box-shadow: 0 6px 0 #000;
+			background: #2a3f62;
+			padding: 12px;
+			cursor: pointer;
+			transition: transform 0.13s ease;
+		}
+
+		.node:hover {
+			transform: translateY(-3px);
+		}
+
+		.node-top {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 8px;
+			gap: 8px;
+		}
+
+		.badge {
+			font-family: "Press Start 2P", cursive;
+			font-size: 0.5rem;
+			padding: 4px 6px;
+			border: 2px solid #000;
+			color: #000;
+			box-shadow: 2px 2px 0 #000;
+			background: var(--pixel-cyan);
+		}
+
+		.status {
+			font-family: "Press Start 2P", cursive;
+			font-size: 0.47rem;
+			color: #000;
+			padding: 4px 6px;
+			border: 2px solid #000;
+			box-shadow: 2px 2px 0 #000;
+			background: var(--pixel-yellow);
+		}
+
+		.node h3 {
+			font-family: "Press Start 2P", cursive;
+			font-size: 0.58rem;
+			line-height: 1.65;
+			color: var(--ink);
+			margin-bottom: 7px;
+		}
+
+		.node p {
+			color: var(--muted);
+			font-size: 1.2rem;
+			line-height: 1.22;
+		}
+
+		.node.locked {
+			background: #334760;
+			filter: grayscale(0.5);
+			cursor: not-allowed;
+		}
+
+		.node.locked .status {
+			background: #9aa5be;
+		}
+
+		.node.open {
+			background: #39557f;
+		}
+
+		.node.done {
+			background: #224d3e;
+		}
+
+		.node.done .status {
+			background: var(--pixel-green);
+		}
+
+		.node.open .status {
+			background: var(--pixel-orange);
+		}
+
+		.prompt {
+			margin-top: 12px;
+			padding: 12px;
+			border: 3px solid #000;
+			box-shadow: 0 5px 0 #000;
+			background: #1a2740;
+			font-size: 1.25rem;
+			color: var(--muted);
+			min-height: 62px;
+		}
+
+		.chip-row {
+			margin-top: 12px;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+		}
+
+		.chip {
+			border: 3px solid #000;
+			box-shadow: 0 4px 0 #000;
+			background: #36547f;
+			color: var(--ink);
+			font-family: "Press Start 2P", cursive;
+			font-size: 0.5rem;
+			padding: 8px;
+		}
+
+		.hub-link {
+			text-decoration: none;
+			display: inline-block;
+			background: var(--pixel-yellow);
+			color: #000;
+		}
+
+		@keyframes floatBit {
+			0% { transform: translateY(0px); }
+			50% { transform: translateY(-3px); }
+			100% { transform: translateY(0px); }
+		}
+
+		.node {
+			animation: floatBit 2.6s steps(2, end) infinite;
+			animation-delay: calc(var(--i, 0) * 0.06s);
+		}
+
+		@media (max-width: 940px) {
+			.layout {
+				grid-template-columns: 1fr;
+			}
+
+			.sidebar {
+				position: static;
+			}
+		}
+
+		@media (max-width: 740px) {
+			.topbar {
+				justify-content: center;
+			}
+
+			.hud {
+				width: 100%;
+				justify-content: center;
+			}
+
+			.lesson.left,
+			.lesson.right,
+			.lesson.center {
+				justify-content: center;
+				padding-left: 0;
+				padding-right: 0;
+			}
+
+			.path {
+				left: 24px;
+				transform: none;
+			}
+
+			.roadmap {
+				padding-left: 26px;
+			}
+
+			.lesson {
+				justify-content: flex-start !important;
+				padding-left: 16px;
+			}
+
+			.node {
+				width: 100%;
+			}
+		}
+
+		/* Brand guide enforcement */
+		:root {
+			--parchment-cream: #FFF8E7;
+			--aged-scroll: #F5E6D3;
+			--ancient-paper: #E8D4B8;
+			--dragon-fire: #E63946;
+			--gold-coin: #FFB703;
+			--health-potion: #06A77D;
+			--dungeon-purple: #6A4C93;
+			--shadow-black: #1D1D1D;
+			--stone-gray: #686868;
+			--pixel-white: #FFFFFF;
+		}
+
+		* {
+			font-family: 'Press Start 2P', cursive !important;
+			border-radius: 0 !important;
+			animation: none !important;
+			transition: none !important;
+		}
+
+		body {
+			background: var(--parchment-cream) !important;
+			color: var(--shadow-black) !important;
+		}
+
+		.scanlines {
+			display: none !important;
+		}
+
+		.pixel-panel,
+		.header-card,
+		.node,
+		.track-btn,
+		.hud-chip,
+		.xp-meter,
+		.prompt,
+		.chip,
+		.tiny-node {
+			border: 4px solid var(--shadow-black) !important;
+			box-shadow: 8px 8px 0 var(--shadow-black) !important;
+		}
+
+		.topbar,
+		.sidebar,
+		.main,
+		.header-card,
+		.prompt,
+		.node,
+		.track-btn {
+			background: var(--aged-scroll) !important;
+			color: var(--shadow-black) !important;
+		}
+
+		.title,
+		#trackTitle {
+			color: var(--dragon-fire) !important;
+		}
+
+		.subtitle,
+		#trackDescription,
+		.node p,
+		.legend,
+		.meter-label {
+			color: var(--stone-gray) !important;
+		}
+
+		.brand,
+		.badge,
+		.status,
+		.track-btn.active,
+		.track-btn:hover,
+		.xp-fill,
+		.hub-link {
+			background: var(--gold-coin) !important;
+			color: var(--shadow-black) !important;
+		}
+
+		.node.done .status,
+		.node.done,
+		.tiny-node.done {
+			background: var(--health-potion) !important;
+			color: var(--pixel-white) !important;
+		}
+
+		.node.locked,
+		.tiny-node.locked {
+			background: var(--stone-gray) !important;
+			color: var(--pixel-white) !important;
+			filter: none !important;
+		}
+
+		.path,
+		.xp-meter {
+			background: var(--ancient-paper) !important;
+		}
+	</style>
+</head>
+<body>
+	<div class="scanlines"></div>
+
+	<div class="page">
+		<header class="topbar pixel-panel">
+			<div class="brand">TAXQUEST 8-BIT ROADMAP</div>
+
+			<div class="xp-wrap">
+				<div class="meter-label">
+					<span>Course XP</span>
+					<span id="xpText">120 / 500</span>
+				</div>
+				<div class="xp-meter" aria-label="Course XP Progress">
+					<div class="xp-fill" id="xpFill"></div>
+				</div>
+			</div>
+
+			<div class="hud">
+				<div class="hud-chip lives">LIVES: 5</div>
+				<div class="hud-chip streak">STREAK: 7</div>
+			</div>
+		</header>
+
+		<section class="layout">
+			<aside class="sidebar pixel-panel" aria-label="Track Selection">
+				<h1 class="title">Choose Tax Track</h1>
+				<p class="subtitle">Pick your filing path and level up through lessons.</p>
+
+				<div class="track-list" id="trackList"></div>
+
+				<div class="legend" aria-label="Legend">
+					<div class="legend-row"><span class="tiny-node open"></span> Open lesson</div>
+					<div class="legend-row"><span class="tiny-node done"></span> Completed lesson</div>
+					<div class="legend-row"><span class="tiny-node locked"></span> Locked lesson</div>
+				</div>
+			</aside>
+
+			<main class="main pixel-panel" aria-live="polite">
+				<section class="header-card">
+					<h2 id="trackTitle">W-2 EMPLOYEE TRACK</h2>
+					<p id="trackDescription">Learn to read your W-2, collect standard deductions, and file with confidence.</p>
+					<div class="chip-row" id="focusChips"></div>
+					<div class="chip-row">
+						<a class="chip hub-link" id="startTrackLink" href="levels/w2-level-1.html">Start Track Levels</a>
+						<a class="chip hub-link" href="levels/index.html">Open All Level Pages</a>
+					</div>
+				</section>
+
+				<section class="roadmap" id="roadmap" aria-label="Lesson Roadmap">
+					<div class="path"></div>
+				</section>
+
+				<section class="prompt" id="lessonPrompt">
+					Click any open lesson to simulate completing it and gaining XP.
+				</section>
+			</main>
+		</section>
+	</div>
+
+	<script>
+		const tracks = [
+			{
+				key: "w2",
+				name: "W-2 Employees",
+				title: "W-2 EMPLOYEE TRACK",
+				description: "Learn to read your W-2, collect standard deductions, and file with confidence.",
+				focus: ["Wages", "Withholding", "Credits"],
+				lessons: [
+					{ title: "Spawn In: Filing Basics", type: "Level 1", detail: "Choose status, gather docs, and avoid rookie filing mistakes.", state: "done" },
+					{ title: "Decode Your W-2", type: "Level 2", detail: "Map each box to what it means for taxes and refunds.", state: "done" },
+					{ title: "Standard Deduction Route", type: "Level 3", detail: "Learn when the standard deduction beats itemizing.", state: "open" },
+					{ title: "Tax Credits Power-Up", type: "Level 4", detail: "Find eligibility for education and dependent credits.", state: "locked" },
+					{ title: "Refund Boss Battle", type: "Boss", detail: "Estimate refund or balance due before filing.", state: "locked" }
+				]
+			},
+			{
+				key: "self1099",
+				name: "1099 Self-Employed",
+				title: "1099 SELF-EMPLOYED TRACK",
+				description: "Master income tracking, deductible expenses, and quarterly tax strategy.",
+				focus: ["Schedule C", "SE Tax", "Quarterlies"],
+				lessons: [
+					{ title: "Gig Income Start", type: "Level 1", detail: "Understand which 1099 forms report your freelance income.", state: "done" },
+					{ title: "Expense Inventory", type: "Level 2", detail: "Separate business expenses from personal spending.", state: "open" },
+					{ title: "Schedule C Forge", type: "Level 3", detail: "Build a clean profit/loss statement for filing.", state: "locked" },
+					{ title: "Self-Employment Tax", type: "Level 4", detail: "Estimate SE tax and understand deductible half.", state: "locked" },
+					{ title: "Quarterly Quest", type: "Boss", detail: "Plan four estimated payments to avoid penalties.", state: "locked" }
+				]
+			},
+			{
+				key: "investor1099b",
+				name: "1099-B Investors",
+				title: "1099-B INVESTOR TRACK",
+				description: "Handle capital gains, wash sale rules, and portfolio tax optimization.",
+				focus: ["Basis", "Gains/Losses", "Wash Sales"],
+				lessons: [
+					{ title: "Trade Log Setup", type: "Level 1", detail: "Read your 1099-B and confirm every covered lot.", state: "done" },
+					{ title: "Cost Basis Repair", type: "Level 2", detail: "Fix missing basis and category codes.", state: "open" },
+					{ title: "Short vs Long Term", type: "Level 3", detail: "Split gains by holding period for proper rates.", state: "locked" },
+					{ title: "Loss Harvesting", type: "Level 4", detail: "Use losses strategically without triggering wash sale traps.", state: "locked" },
+					{ title: "Portfolio Final Boss", type: "Boss", detail: "Complete Form 8949 + Schedule D flow.", state: "locked" }
+				]
+			}
+		];
+
+		const pattern = ["center", "left", "right", "left", "center", "right"];
+		let currentTrack = tracks[0];
+		let xp = 120;
+
+		const trackList = document.getElementById("trackList");
+		const roadmap = document.getElementById("roadmap");
+		const trackTitle = document.getElementById("trackTitle");
+		const trackDescription = document.getElementById("trackDescription");
+		const focusChips = document.getElementById("focusChips");
+		const lessonPrompt = document.getElementById("lessonPrompt");
+		const xpFill = document.getElementById("xpFill");
+		const xpText = document.getElementById("xpText");
+		const startTrackLink = document.getElementById("startTrackLink");
+
+		const trackStartMap = {
+			w2: "levels/w2-level-1.html",
+			self1099: "levels/self1099-level-1.html",
+			investor1099b: "levels/investor1099b-level-1.html"
+		};
+
+		function drawTracks() {
+			trackList.innerHTML = "";
+			tracks.forEach((track) => {
+				const button = document.createElement("button");
+				button.className = `track-btn${track.key === currentTrack.key ? " active" : ""}`;
+				button.textContent = track.name;
+				button.addEventListener("click", () => {
+					currentTrack = track;
+					drawTracks();
+					drawHeader();
+					drawRoadmap();
+				});
+				trackList.appendChild(button);
+			});
+		}
+
+		function drawHeader() {
+			trackTitle.textContent = currentTrack.title;
+			trackDescription.textContent = currentTrack.description;
+			startTrackLink.href = trackStartMap[currentTrack.key] || "levels/index.html";
+			focusChips.innerHTML = "";
+			currentTrack.focus.forEach((item) => {
+				const chip = document.createElement("span");
+				chip.className = "chip";
+				chip.textContent = item;
+				focusChips.appendChild(chip);
+			});
+		}
+
+		function drawRoadmap() {
+			const path = roadmap.querySelector(".path");
+			roadmap.innerHTML = "";
+			roadmap.appendChild(path);
+
+			currentTrack.lessons.forEach((lesson, index) => {
+				const wrap = document.createElement("article");
+				const pos = pattern[index % pattern.length];
+				wrap.className = `lesson ${pos}`;
+
+				const node = document.createElement("button");
+				node.type = "button";
+				node.className = `node ${lesson.state}`;
+				node.style.setProperty("--i", String(index));
+				node.setAttribute("aria-label", `${lesson.title} ${lesson.state}`);
+
+				node.innerHTML = `
+					<div class="node-top">
+						<span class="badge">${lesson.type}</span>
+						<span class="status">${lesson.state.toUpperCase()}</span>
+					</div>
+					<h3>${lesson.title}</h3>
+					<p>${lesson.detail}</p>
+				`;
+
+				node.addEventListener("click", () => {
+					if (lesson.state === "locked") {
+						lessonPrompt.textContent = "This lesson is locked. Beat the previous level first!";
+						return;
+					}
+
+					if (lesson.state === "done") {
+						lessonPrompt.textContent = `Replay unlocked: ${lesson.title}. Nice review run.`;
+						return;
+					}
+
+					lesson.state = "done";
+					const nextLesson = currentTrack.lessons[index + 1];
+					if (nextLesson && nextLesson.state === "locked") {
+						nextLesson.state = "open";
+					}
+
+					xp = Math.min(500, xp + 45);
+					updateXP();
+					drawRoadmap();
+					lessonPrompt.textContent = `Quest cleared: ${lesson.title}. You gained +45 XP.`;
+				});
+
+				wrap.appendChild(node);
+				roadmap.appendChild(wrap);
+			});
+		}
+
+		function updateXP() {
+			const pct = (xp / 500) * 100;
+			xpFill.style.width = `${pct}%`;
+			xpText.textContent = `${xp} / 500`;
+		}
+
+		drawTracks();
+		drawHeader();
+		drawRoadmap();
+		updateXP();
+	</script>
+</body>
+</html>
+

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1099-B Investors Level 4 | TaxQuest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="level-base.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="page">
+    <header class="topbar pixel-panel">
+      <div class="brand">TAXQUEST LEVEL MODE</div>
+      <nav class="nav-links">
+        <a class="pixel-link" href="../roadmap.html">Back to Roadmap</a>
+        <a class="pixel-link alt" href="index.html">All Levels</a>
+      </nav>
+    </header>
+
+    <main class="main pixel-panel">
+      <section class="hero-card">
+        <p class="track" id="track"></p>
+        <h1 class="hero-title" id="levelTitle"></h1>
+        <p class="hero-intro" id="intro"></p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Knowledge Check (2-3 MCQs)</h2>
+          <div id="mcqs"></div>
+          <button id="checkMcq" class="btn" type="button">Check Multiple Choice</button>
+          <p id="mcqFeedback" class="feedback"></p>
+        </article>
+
+        <article class="card">
+          <h2>Final Section Fill</h2>
+          <p class="mcq-q" id="finalPrompt"></p>
+          <div class="final-wrap">
+            <label id="finalInputLabel" for="finalInput"></label>
+            <input id="finalInput" type="text" placeholder="Type your answer..." />
+            <button id="checkFinal" class="btn" type="button" disabled>Check Final Answer</button>
+            <p id="finalResult" class="result">Complete MCQs first to unlock this section.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer class="foot">
+        <a id="prevLink" class="pixel-link alt" href="#">Previous Level</a>
+        <a id="nextLink" class="pixel-link" href="#">Next Level</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>window.LEVEL_DATA = {"file":"investor1099b-level-4.html","track":"1099-B Investors","level":"Level 4","title":"Wash Sale Adjustment Basics","intro":"A wash sale can defer a loss if substantially identical securities are repurchased in the wash window. Brokers may report wash adjustments on 1099-B.","mcqs":[{"q":"A wash sale generally does what to a loss?","options":["Defers/disallows current deduction","Doubles the loss deduction","Creates withholding credit"],"answer":0,"explain":"Loss may be deferred under wash sale rules."},{"q":"Wash sale data may appear on:","options":["1099-B adjustments column","W-2 Box 1","Schedule E only"],"answer":0,"explain":"Broker statements often include wash adjustments."},{"q":"Ignoring wash adjustments can:","options":["Overstate deductible losses","Increase basis always correctly","Reduce need for Form 8949"],"answer":0,"explain":"It can misstate allowable loss."}],"final":{"prompt":"Enter allowed loss if original loss is 600 and wash adjustment is 400 deferred.","label":"Enter currently allowed loss:","answers":["$200","200","-200"],"hint":"Allowed now is 200 loss."},"prev":"investor1099b-level-3.html","next":"investor1099b-level-5.html"};</script>
+  <script src="level-base.js"></script>
+</body>
+</html>

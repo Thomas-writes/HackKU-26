@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1099-B Investors Level 3 | TaxQuest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="level-base.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="page">
+    <header class="topbar pixel-panel">
+      <div class="brand">TAXQUEST LEVEL MODE</div>
+      <nav class="nav-links">
+        <a class="pixel-link" href="../roadmap.html">Back to Roadmap</a>
+        <a class="pixel-link alt" href="index.html">All Levels</a>
+      </nav>
+    </header>
+
+    <main class="main pixel-panel">
+      <section class="hero-card">
+        <p class="track" id="track"></p>
+        <h1 class="hero-title" id="levelTitle"></h1>
+        <p class="hero-intro" id="intro"></p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Knowledge Check (2-3 MCQs)</h2>
+          <div id="mcqs"></div>
+          <button id="checkMcq" class="btn" type="button">Check Multiple Choice</button>
+          <p id="mcqFeedback" class="feedback"></p>
+        </article>
+
+        <article class="card">
+          <h2>Final Section Fill</h2>
+          <p class="mcq-q" id="finalPrompt"></p>
+          <div class="final-wrap">
+            <label id="finalInputLabel" for="finalInput"></label>
+            <input id="finalInput" type="text" placeholder="Type your answer..." />
+            <button id="checkFinal" class="btn" type="button" disabled>Check Final Answer</button>
+            <p id="finalResult" class="result">Complete MCQs first to unlock this section.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer class="foot">
+        <a id="prevLink" class="pixel-link alt" href="#">Previous Level</a>
+        <a id="nextLink" class="pixel-link" href="#">Next Level</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>window.LEVEL_DATA = {"file":"investor1099b-level-3.html","track":"1099-B Investors","level":"Level 3","title":"Form 8949 Category Codes","intro":"Form 8949 uses categories (A-F) based on whether basis was reported to IRS and holding period type. Correct category placement improves reporting accuracy.","mcqs":[{"q":"Category A generally means:","options":["Short-term, basis reported","Long-term, basis not reported","Crypto only"],"answer":0,"explain":"Category A is short-term with basis reported."},{"q":"Why does category selection matter?","options":["It determines where sale is reported","It sets your filing status","It removes need for basis"],"answer":0,"explain":"Wrong category can misreport transaction type."},{"q":"Form 8949 details then roll into:","options":["Schedule D","Schedule C","Form W-4"],"answer":0,"explain":"Totals flow to Schedule D."}],"final":{"prompt":"Enter category for short-term sale with basis reported.","label":"Enter category letter:","answers":["A","a"],"hint":"Use category A."},"prev":"investor1099b-level-2.html","next":"investor1099b-level-4.html"};</script>
+  <script src="level-base.js"></script>
+</body>
+</html>

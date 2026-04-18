@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1099 Self-Employed Level 5 Boss | TaxQuest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="level-base.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="page">
+    <header class="topbar pixel-panel">
+      <div class="brand">TAXQUEST LEVEL MODE</div>
+      <nav class="nav-links">
+        <a class="pixel-link" href="../roadmap.html">Back to Roadmap</a>
+        <a class="pixel-link alt" href="index.html">All Levels</a>
+      </nav>
+    </header>
+
+    <main class="main pixel-panel">
+      <section class="hero-card">
+        <p class="track" id="track"></p>
+        <h1 class="hero-title" id="levelTitle"></h1>
+        <p class="hero-intro" id="intro"></p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Knowledge Check (2-3 MCQs)</h2>
+          <div id="mcqs"></div>
+          <button id="checkMcq" class="btn" type="button">Check Multiple Choice</button>
+          <p id="mcqFeedback" class="feedback"></p>
+        </article>
+
+        <article class="card">
+          <h2>Final Section Fill</h2>
+          <p class="mcq-q" id="finalPrompt"></p>
+          <div class="final-wrap">
+            <label id="finalInputLabel" for="finalInput"></label>
+            <input id="finalInput" type="text" placeholder="Type your answer..." />
+            <button id="checkFinal" class="btn" type="button" disabled>Check Final Answer</button>
+            <p id="finalResult" class="result">Complete MCQs first to unlock this section.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer class="foot">
+        <a id="prevLink" class="pixel-link alt" href="#">Previous Level</a>
+        <a id="nextLink" class="pixel-link" href="#">Next Level</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>window.LEVEL_DATA = {"file":"self1099-level-5.html","track":"1099 Self-Employed","level":"Level 5 Boss","title":"Estimated Tax Payment Planning","intro":"Many self-employed filers make quarterly estimated payments. These payments reduce underpayment risk and spread tax liability throughout the year.","mcqs":[{"q":"Quarterly payments help avoid:","options":["Underpayment penalties","Filing status changes","Need for records"],"answer":0,"explain":"They reduce underpayment risk."},{"q":"Estimated payments are usually made:","options":["Four times per year","Once every five years","Only at tax deadline"],"answer":0,"explain":"Typical schedule is quarterly."},{"q":"Payment amount planning should use:","options":["Income/profit projections","Random estimates","Neighbor tax totals"],"answer":0,"explain":"Use your own projected earnings and tax."}],"final":{"prompt":"Enter one quarterly payment amount if annual estimated tax is 4,000.","label":"Enter one quarter amount:","answers":["$1000","1000","1,000"],"hint":"4,000 / 4 = 1,000."},"prev":"self1099-level-4.html","next":"investor1099b-level-1.html"};</script>
+  <script src="level-base.js"></script>
+</body>
+</html>

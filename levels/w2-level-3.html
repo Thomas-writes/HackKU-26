@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>W-2 Employees Level 3 | TaxQuest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="level-base.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="page">
+    <header class="topbar pixel-panel">
+      <div class="brand">TAXQUEST LEVEL MODE</div>
+      <nav class="nav-links">
+        <a class="pixel-link" href="../roadmap.html">Back to Roadmap</a>
+        <a class="pixel-link alt" href="index.html">All Levels</a>
+      </nav>
+    </header>
+
+    <main class="main pixel-panel">
+      <section class="hero-card">
+        <p class="track" id="track"></p>
+        <h1 class="hero-title" id="levelTitle"></h1>
+        <p class="hero-intro" id="intro"></p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Knowledge Check (2-3 MCQs)</h2>
+          <div id="mcqs"></div>
+          <button id="checkMcq" class="btn" type="button">Check Multiple Choice</button>
+          <p id="mcqFeedback" class="feedback"></p>
+        </article>
+
+        <article class="card">
+          <h2>Final Section Fill</h2>
+          <p class="mcq-q" id="finalPrompt"></p>
+          <div class="final-wrap">
+            <label id="finalInputLabel" for="finalInput"></label>
+            <input id="finalInput" type="text" placeholder="Type your answer..." />
+            <button id="checkFinal" class="btn" type="button" disabled>Check Final Answer</button>
+            <p id="finalResult" class="result">Complete MCQs first to unlock this section.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer class="foot">
+        <a id="prevLink" class="pixel-link alt" href="#">Previous Level</a>
+        <a id="nextLink" class="pixel-link" href="#">Next Level</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>window.LEVEL_DATA = {"file":"w2-level-3.html","track":"W-2 Employees","level":"Level 3","title":"W-2 Box 12: Code D Retirement Deferral","intro":"Box 12 with Code D usually reports employee 401(k) deferrals. These contributions are often pre-tax for federal income tax and can explain lower Box 1 wages.","mcqs":[{"q":"Code D in Box 12 usually means:","options":["401(k) elective deferrals","Medical insurance total","State tax refund"],"answer":0,"explain":"Code D is commonly traditional 401(k) deferral."},{"q":"Do Code D amounts generally increase Box 1 taxable wages?","options":["No, they often reduce taxable wages","Yes, always","Only for state return"],"answer":0,"explain":"Traditional deferrals can reduce federal taxable wages."},{"q":"Why does this field matter?","options":["It helps explain taxable wage differences","It determines filing status","It replaces Social Security number"],"answer":0,"explain":"It clarifies why gross and taxable wages differ."}],"final":{"prompt":"Record the Code D amount from Box 12 in the retirement info field.","label":"Enter Box 12 Code D amount:","answers":["$1200","1200","1,200"],"hint":"Use 1,200 for this lesson sample."},"prev":"w2-level-2.html","next":"w2-level-4.html"};</script>
+  <script src="level-base.js"></script>
+</body>
+</html>

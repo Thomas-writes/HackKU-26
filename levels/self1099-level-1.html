@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1099 Self-Employed Level 1 | TaxQuest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="level-base.css" />
+</head>
+<body>
+  <div class="scanlines"></div>
+  <div class="page">
+    <header class="topbar pixel-panel">
+      <div class="brand">TAXQUEST LEVEL MODE</div>
+      <nav class="nav-links">
+        <a class="pixel-link" href="../roadmap.html">Back to Roadmap</a>
+        <a class="pixel-link alt" href="index.html">All Levels</a>
+      </nav>
+    </header>
+
+    <main class="main pixel-panel">
+      <section class="hero-card">
+        <p class="track" id="track"></p>
+        <h1 class="hero-title" id="levelTitle"></h1>
+        <p class="hero-intro" id="intro"></p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Knowledge Check (2-3 MCQs)</h2>
+          <div id="mcqs"></div>
+          <button id="checkMcq" class="btn" type="button">Check Multiple Choice</button>
+          <p id="mcqFeedback" class="feedback"></p>
+        </article>
+
+        <article class="card">
+          <h2>Final Section Fill</h2>
+          <p class="mcq-q" id="finalPrompt"></p>
+          <div class="final-wrap">
+            <label id="finalInputLabel" for="finalInput"></label>
+            <input id="finalInput" type="text" placeholder="Type your answer..." />
+            <button id="checkFinal" class="btn" type="button" disabled>Check Final Answer</button>
+            <p id="finalResult" class="result">Complete MCQs first to unlock this section.</p>
+          </div>
+        </article>
+      </section>
+
+      <footer class="foot">
+        <a id="prevLink" class="pixel-link alt" href="#">Previous Level</a>
+        <a id="nextLink" class="pixel-link" href="#">Next Level</a>
+      </footer>
+    </main>
+  </div>
+
+  <script>window.LEVEL_DATA = {"file":"self1099-level-1.html","track":"1099 Self-Employed","level":"Level 1","title":"1099-NEC Box 1: Nonemployee Compensation","intro":"Form 1099-NEC Box 1 reports payments made to you as an independent contractor. This usually belongs on Schedule C as business income.","mcqs":[{"q":"1099-NEC Box 1 is usually treated as:","options":["Business income on Schedule C","Tax withholding","Interest income"],"answer":0,"explain":"Nonemployee compensation is business income."},{"q":"Who commonly receives 1099-NEC?","options":["Freelancers/contractors","Only W-2 employees","Retirees only"],"answer":0,"explain":"Contract workers typically receive it."},{"q":"Missing one 1099-NEC can cause:","options":["Income mismatch notices","Lower audit risk automatically","No issue if under 100k"],"answer":0,"explain":"Reported payer income should be included."}],"final":{"prompt":"Enter total nonemployee compensation from 1099-NEC Box 1.","label":"Enter Box 1 amount:","answers":["$9600","9600","9,600"],"hint":"Use 9,600 for this lesson sample."},"prev":"w2-level-5.html","next":"self1099-level-2.html"};</script>
+  <script src="level-base.js"></script>
+</body>
+</html>
