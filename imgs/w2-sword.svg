@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="40" viewBox="0 0 128 40" shape-rendering="crispEdges">
+  <!-- pommel -->
+  <rect x="2" y="14" width="12" height="12" fill="#d7c2a2" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="6" y="18" width="4" height="4" fill="#f7ead6"/>
+
+  <!-- grip with wrap segments -->
+  <rect x="14" y="11" width="18" height="18" fill="#7c4a24" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="16" y="13" width="2" height="14" fill="#b0713f"/>
+  <rect x="20" y="13" width="2" height="14" fill="#b0713f"/>
+  <rect x="24" y="13" width="2" height="14" fill="#b0713f"/>
+  <rect x="28" y="13" width="2" height="14" fill="#b0713f"/>
+
+  <!-- guard and quillons -->
+  <rect x="32" y="10" width="16" height="20" fill="#c3872f" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="36" y="6" width="34" height="6" fill="#d8a041" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="36" y="28" width="34" height="6" fill="#d8a041" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="38" y="8" width="30" height="2" fill="#f1c76a"/>
+
+  <!-- ricasso -->
+  <rect x="48" y="14" width="12" height="12" fill="#c9ced3" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="50" y="16" width="8" height="8" fill="#eef2f5"/>
+
+  <!-- blade body -->
+  <rect x="60" y="12" width="48" height="16" fill="#d8dde1" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="62" y="14" width="44" height="4" fill="#f6f8fa"/>
+  <rect x="62" y="20" width="44" height="2" fill="#a4adb4"/>
+  <rect x="62" y="22" width="44" height="4" fill="#c6cdd3"/>
+
+  <!-- fuller groove -->
+  <rect x="66" y="19" width="30" height="2" fill="#8d98a1"/>
+
+  <!-- pre-tip taper -->
+  <rect x="108" y="14" width="10" height="12" fill="#d8dde1" stroke="#1d1d1d" stroke-width="2"/>
+  <rect x="110" y="16" width="6" height="2" fill="#f6f8fa"/>
+
+  <!-- tip -->
+  <polygon points="118,14 126,20 118,26" fill="#e9edf0" stroke="#1d1d1d" stroke-width="2"/>
+  <polygon points="119,16 123,20 119,24" fill="#f8fafb"/>
+</svg>

@@ -208,7 +208,7 @@ body {
 }
 
 .goblin-flash.active {
-  animation: goblin-flash 0.5s steps(1) 1;
+  animation: goblin-flash 0.62s steps(1) 1 !important;
 }
 
 .goblin-ear,
@@ -278,7 +278,7 @@ body {
 }
 
 .goblin-art.hurt {
-  animation: goblin-hit 0.24s steps(2) 1;
+  animation: goblin-hit 0.62s steps(2) 1 !important;
 }
 
 .goblin-art.defeated {
@@ -296,43 +296,47 @@ body {
 
 .goblin-sword {
   position: absolute;
-  width: 74px;
-  height: 22px;
-  transform-origin: 8px 50%;
+  width: 120px;
+  height: 40px;
+  transform-origin: 12px 20px;
   will-change: transform, left, top;
 }
 
-.goblin-sword-blade {
-  position: absolute;
-  left: 16px;
-  top: 7px;
-  width: 44px;
-  height: 8px;
-  background: var(--pixel-white);
-  border: 4px solid var(--shadow-black);
-  box-shadow: 4px 4px 0 var(--shadow-black);
+.goblin-sword-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
 }
 
-.goblin-sword-guard {
+.goblin-fireball {
   position: absolute;
-  left: 8px;
-  top: 2px;
-  width: 12px;
-  height: 18px;
-  background: var(--gold-coin);
-  border: 4px solid var(--shadow-black);
-  box-shadow: 4px 4px 0 var(--shadow-black);
+  width: 30px;
+  height: 30px;
+  transform-origin: 50% 50%;
 }
 
-.goblin-sword-hilt {
+.goblin-fireball-core {
   position: absolute;
-  left: 0;
-  top: 5px;
-  width: 16px;
-  height: 12px;
+  inset: 0;
+  border: 4px solid var(--shadow-black);
+  box-shadow: 4px 4px 0 var(--shadow-black);
   background: var(--dragon-fire);
+}
+
+.goblin-fireball-trail {
+  position: absolute;
+  left: -14px;
+  top: 8px;
+  width: 18px;
+  height: 14px;
   border: 4px solid var(--shadow-black);
   box-shadow: 4px 4px 0 var(--shadow-black);
+  background: var(--gold-coin);
+}
+
+.goblin-fireball.impact .goblin-fireball-core {
+  background: var(--gold-coin);
 }
 
 @keyframes goblin-flash {
@@ -374,16 +378,28 @@ body {
     transform: translateX(0);
   }
 
-  25% {
-    transform: translateX(-6px);
-  }
-
-  50% {
-    transform: translateX(6px);
-  }
-
-  75% {
+  12% {
     transform: translateX(-4px);
+  }
+
+  24% {
+    transform: translateX(4px);
+  }
+
+  36% {
+    transform: translateX(-3px);
+  }
+
+  48% {
+    transform: translateX(3px);
+  }
+
+  60% {
+    transform: translateX(-2px);
+  }
+
+  72% {
+    transform: translateX(2px);
   }
 
   100% {

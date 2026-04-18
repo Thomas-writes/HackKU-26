@@ -988,8 +988,13 @@
 
 			const knight = document.createElement("img");
 			knight.className = "knight-marker";
-			knight.src = "./imgs/knight.png";
-			knight.alt = "Knight marker";
+			if (currentTrack.key === "self1099") {
+				knight.src = "./imgs/wizard.png";
+				knight.alt = "Wizard marker";
+			} else {
+				knight.src = "./imgs/knight.png";
+				knight.alt = "Knight marker";
+			}
 			lessons[targetIndex].appendChild(knight);
 		}
 

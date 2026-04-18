@@ -26,6 +26,7 @@
     prevLink: document.getElementById("prevLink"),
     nextLink: document.getElementById("nextLink")
   };
+  const topRoadmapLink = document.querySelector('.nav-links .pixel-link');
 
   const roadmapKey = data.file.startsWith("w2-")
     ? "w2"
@@ -35,6 +36,11 @@
         ? "investor1099b"
         : "";
   const roadmapUrl = roadmapKey ? `../roadmap.html?track=${roadmapKey}` : "../roadmap.html";
+  const attackType = roadmapKey === "self1099" ? "fireball" : "sword";
+
+  if (topRoadmapLink) {
+    topRoadmapLink.href = roadmapUrl;
+  }
 
   el.track.textContent = data.track + " - " + data.level;
   el.title.textContent = data.title;
@@ -67,10 +73,10 @@
   const goblinHealth = goblinHud.querySelector("#goblinHealth");
   const goblinArt = goblinHud.querySelector("#goblinArt");
   const goblinFlash = goblinHud.querySelector(".goblin-flash");
-  const swordLayer = document.createElement("div");
-  swordLayer.className = "sword-layer";
-  swordLayer.style.zIndex = "9999";
-  document.body.appendChild(swordLayer);
+  const attackLayer = document.createElement("div");
+  attackLayer.className = "sword-layer";
+  attackLayer.style.zIndex = "9999";
+  document.body.appendChild(attackLayer);
 
   if (data.prev) {
     el.prevLink.href = data.prev;
@@ -119,12 +125,12 @@
     }
   };
 
-  const playSwordStrike = (fromElement) => {
-    if (!fromElement || !goblinArt || !swordLayer) return;
+  const getAttackVectors = (fromElement) => {
+    if (!fromElement || !goblinArt || !attackLayer) return null;
 
     const fromRect = fromElement.getBoundingClientRect();
     const targetRect = goblinArt.getBoundingClientRect();
-    const layerRect = swordLayer.getBoundingClientRect();
+    const layerRect = attackLayer.getBoundingClientRect();
     const startX = fromRect.left - layerRect.left + fromRect.width / 2;
     const startY = fromRect.top - layerRect.top + fromRect.height / 2;
     const endX = targetRect.left - layerRect.left + targetRect.width / 2;
@@ -133,31 +139,82 @@
     const dx = endX - startX;
     const dy = endY - startY;
 
+    return { startX, startY, endX, endY, angle, dx, dy };
+  };
+
+  const playSwordStrike = (_fromElement, onImpact) => {
+    if (!goblinArt || !attackLayer) return;
+    const targetRect = goblinArt.getBoundingClientRect();
+    const layerRect = attackLayer.getBoundingClientRect();
+    const startX = targetRect.left - layerRect.left - 14;
+    const startY = targetRect.top - layerRect.top + targetRect.height * 0.46;
+
     const sword = document.createElement("span");
     sword.className = "goblin-sword";
     sword.style.left = `${startX}px`;
     sword.style.top = `${startY}px`;
-    sword.style.transform = `rotate(${angle}deg)`;
-    sword.innerHTML = `
-      <span class="goblin-sword-blade"></span>
-      <span class="goblin-sword-guard"></span>
-      <span class="goblin-sword-hilt"></span>
-    `;
-    swordLayer.appendChild(sword);
+    sword.innerHTML = `<img class="goblin-sword-img" src="../imgs/w2-sword.svg" alt="" aria-hidden="true" />`;
+    attackLayer.appendChild(sword);
 
     void sword.offsetWidth;
     sword.animate(
       [
-        { transform: `translate(0, 0) rotate(${angle}deg)` },
-        { transform: `translate(${dx * 0.55}px, ${dy * 0.55}px) rotate(${angle + 10}deg)` },
-        { transform: `translate(${dx}px, ${dy}px) rotate(${angle - 18}deg)` }
+        { transform: "translate(0, 0) rotate(-48deg)", opacity: 0.95 },
+        { transform: "translate(16px, -2px) rotate(-6deg)", opacity: 1 },
+        { transform: "translate(30px, 0) rotate(28deg)", opacity: 0.94 }
       ],
-      { duration: 420, easing: "steps(4, end)", fill: "forwards" }
+      { duration: 260, easing: "steps(3, end)", fill: "forwards" }
     );
 
     window.setTimeout(() => {
+      if (onImpact) onImpact();
+    }, 140);
+
+    window.setTimeout(() => {
       sword.remove();
-    }, 560);
+    }, 340);
+  };
+
+  const playFireball = (fromElement, onImpact) => {
+    const vectors = getAttackVectors(fromElement);
+    if (!vectors) return;
+    const { startX, startY, dx, dy } = vectors;
+
+    const fireball = document.createElement("span");
+    fireball.className = "goblin-fireball";
+    fireball.style.left = `${startX}px`;
+    fireball.style.top = `${startY}px`;
+    fireball.innerHTML = `
+      <span class="goblin-fireball-core"></span>
+      <span class="goblin-fireball-trail"></span>
+    `;
+    attackLayer.appendChild(fireball);
+
+    fireball.animate(
+      [
+        { transform: "translate(0, 0) scale(0.8)", opacity: 0.95 },
+        { transform: `translate(${dx * 0.6}px, ${dy * 0.6}px) scale(1.1)`, opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px) scale(1.35)`, opacity: 0.8 }
+      ],
+      { duration: 460, easing: "steps(4, end)", fill: "forwards" }
+    );
+
+    window.setTimeout(() => {
+      if (onImpact) onImpact();
+      fireball.classList.add("impact");
+    }, 360);
+
+    window.setTimeout(() => {
+      fireball.remove();
+    }, 620);
+  };
+
+  const playAttack = (fromElement, onImpact) => {
+    if (attackType === "fireball") {
+      playFireball(fromElement, onImpact);
+      return;
+    }
+    playSwordStrike(fromElement, onImpact);
   };
 
   const damageGoblin = () => {
@@ -315,8 +372,7 @@
 
     stepSolved = true;
     updateQuestionChoiceStates(step);
-    damageGoblin();
-    playSwordStrike(questionStage.querySelectorAll(".choice-row")[selectedAnswerIndex]);
+    playAttack(questionStage.querySelectorAll(".choice-row")[selectedAnswerIndex], damageGoblin);
 
     questionFeedback.className = "feedback success";
     questionFeedback.innerHTML = `<strong>Correct.</strong> ${step.question.explain}`;
@@ -423,8 +479,7 @@
 
     finalSubmitted = true;
     markLevelCompleted();
-    damageGoblin();
-    playSwordStrike(finalInput);
+    playAttack(finalInput, damageGoblin);
 
     finalInput.disabled = true;
     finalAction.textContent = data.next ? "Next Level" : "Back to Roadmap";
