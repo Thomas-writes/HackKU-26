@@ -178,7 +178,7 @@
     }
 
     .btn-card-w2 {
-      background: var(--health-potion);
+      background: var(--dragon-fire);
       color: var(--pixel-white);
     }
 
@@ -188,7 +188,7 @@
     }
 
     .btn-card-1099b {
-      background: var(--dragon-fire);
+      background: var(--health-potion);
       color: var(--pixel-white);
     }
 
@@ -212,6 +212,33 @@
     .hero-copy {
       background: var(--aged-scroll);
     }
+
+    .knight-marker {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      width: 60%;
+      height: auto;
+
+      transform: translate(-50%, -50%);
+      image-rendering: pixelated;
+
+      z-index: 5;
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+
+      filter: drop-shadow(6px 6px 0 #000);
+
+      animation: knightBob 1.2s ease-in-out infinite;
+    }
+
+		@keyframes knightBob {
+			0% { margin-top: -2px; }
+			50% { margin-top: 2px; }
+			100% { margin-top: -2px; }
+		}
 
     .eyebrow {
       display: inline-block;
@@ -344,9 +371,9 @@
       text-transform: uppercase;
     }
 
-    .badge-w2 { background: var(--health-potion); color: var(--pixel-white); }
+    .badge-w2 { background: var(--dragon-fire); color: var(--pixel-white); }
     .badge-1099 { background: var(--dungeon-purple); color: var(--pixel-white); }
-    .badge-1099b { background: var(--dragon-fire); color: var(--pixel-white); }
+    .badge-1099b { background: var(--health-potion); color: var(--pixel-white); }
 
     .class-title {
       font-size: 0.9rem;
@@ -372,6 +399,9 @@
       border: var(--border);
       background: var(--ancient-paper);
       display: block;
+
+      position: relative; /* IMPORTANT */
+      overflow: hidden;
     }
 
     
@@ -537,7 +567,9 @@
           </div>
 
           <div class="class-image-frame">
-            <div class="class-image-inner"></div>
+            <div class="class-image-inner">
+              <img src="./imgs/knight.png" class="knight-marker">
+            </div>
           </div>
 
           <div class="card-actions">
