@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tax Quest - Log In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment-cream: #FFF8E7;
+      --aged-scroll: #F5E6D3;
+      --ancient-paper: #E8D4B8;
+      --dragon-fire: #E63946;
+      --gold-coin: #FFB703;
+      --health-potion: #06A77D;
+      --dungeon-purple: #6A4C93;
+      --shadow-black: #1D1D1D;
+      --stone-gray: #686868;
+      --pixel-white: #FFFFFF;
+      --border: 4px solid var(--shadow-black);
+      --shadow: 8px 8px 0 var(--shadow-black);
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-5: 40px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      image-rendering: pixelated;
+    }
+
+    body {
+      font-family: 'Press Start 2P', cursive;
+      background: var(--parchment-cream);
+      background-image: url('../imgs/cobble.png');
+      background-repeat: repeat;
+      color: var(--shadow-black);
+      min-height: 100vh;
+      padding: var(--space-3);
+      line-height: 1.8;
+    }
+
+    button, input {
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      border: var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .header {
+      background: var(--aged-scroll);
+      padding: var(--space-2) var(--space-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-5);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    .brand-icon {
+      width: 52px;
+      height: 52px;
+      border: var(--border);
+      background: var(--dragon-fire);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .brand-icon::before,
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      border: var(--border);
+    }
+
+    .brand-icon::before {
+      width: 12px;
+      height: 12px;
+      right: 4px;
+      top: 4px;
+      background: var(--gold-coin);
+    }
+
+    .brand-icon::after {
+      width: 16px;
+      height: 16px;
+      left: 8px;
+      bottom: 8px;
+      background: var(--health-potion);
+    }
+
+    .brand-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      display: block;
+      color: var(--stone-gray);
+      font-size: 0.52rem;
+      margin-top: 4px;
+    }
+
+    .back-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--shadow-black);
+      background: var(--pixel-white);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 14px 18px;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+    }
+
+    .back-link:hover,
+    .back-link:focus-visible {
+      transform: translate(4px, 4px);
+      box-shadow: 4px 4px 0 var(--shadow-black);
+      outline: none;
+    }
+
+    .auth-wrap {
+      max-width: 560px;
+      margin: 0 auto;
+      background: var(--aged-scroll);
+      padding: var(--space-4);
+    }
+
+    h1 {
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      line-height: 1.5;
+      margin-bottom: var(--space-2);
+      text-transform: uppercase;
+    }
+
+    .subtitle {
+      color: var(--stone-gray);
+      font-size: 0.58rem;
+      margin-bottom: var(--space-4);
+    }
+
+    .form-group {
+      margin-bottom: var(--space-3);
+    }
+
+    label {
+      display: block;
+      font-size: 0.58rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    input {
+      width: 100%;
+      border: var(--border);
+      box-shadow: 4px 4px 0 var(--shadow-black);
+      background: var(--pixel-white);
+      padding: 16px;
+      font-size: 0.58rem;
+      color: var(--shadow-black);
+      outline: none;
+    }
+
+    input:focus {
+      background: var(--parchment-cream);
+    }
+
+    .btn {
+      width: 100%;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 14px 18px;
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: var(--gold-coin);
+      color: var(--shadow-black);
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translate(4px, 4px);
+      box-shadow: 4px 4px 0 var(--shadow-black);
+      outline: none;
+    }
+
+    .btn-google {
+      background: var(--pixel-white);
+      margin-top: var(--space-2);
+    }
+
+    .divider {
+      text-align: center;
+      font-size: 0.52rem;
+      color: var(--stone-gray);
+      margin: var(--space-3) 0;
+      text-transform: uppercase;
+    }
+
+    .helper {
+      margin-top: var(--space-3);
+      text-align: center;
+      font-size: 0.52rem;
+      color: var(--stone-gray);
+    }
+
+    .helper a {
+      color: var(--shadow-black);
+    }
+
+    .footer {
+      margin-top: var(--space-5);
+      background: var(--gold-coin);
+      text-align: center;
+      padding: var(--space-3);
+      font-size: 0.52rem;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: var(--space-2);
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .brand {
+        justify-content: center;
+      }
+
+      .auth-wrap {
+        padding: var(--space-3);
+      }
+
+      h1 {
+        font-size: 0.95rem;
+      }
+
+      .subtitle,
+      label,
+      input,
+      .btn,
+      .helper,
+      .footer,
+      .back-link,
+      .brand-sub {
+        font-size: 0.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header panel">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true"></div>
+        <div class="brand-text">
+          Tax Quest
+          <span class="brand-sub">Making Taxes Legendary Since 2026</span>
+        </div>
+      </div>
+      <a class="back-link" href="../index.html">Back</a>
+    </header>
+
+    <main class="auth-wrap panel">
+      <h1>Log In</h1>
+      <p class="subtitle">Sign in to continue.</p>
+
+      <form>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="Email" />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Password" />
+        </div>
+
+        <button class="btn" type="submit">Log In</button>
+
+        <div class="divider">or</div>
+
+        <button class="btn btn-google" type="button">Sign in with Google</button>
+      </form>
+
+      <p class="helper">
+        Don’t have an account? <a href="signup.html">Sign up</a>
+      </p>
+    </main>
+
+    <footer class="footer panel">
+      Tax Quest - Home Base for Legendary Filers
+    </footer>
+  </div>
+</body>
+</html>
