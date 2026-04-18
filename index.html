@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaxQuest | Duolingo for Taxes</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    :root {
+      --green: #58cc02;
+      --green-dark: #2bb24c;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --bg: #f6fff4;
+      --card: #ffffff;
+      --border: #e5e7eb;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: linear-gradient(180deg, var(--bg) 0%, #ffffff 100%);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 8%;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--green-dark);
+      animation: slideInLeft 0.8s ease forwards;
+    }
+
+    nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #374151;
+      font-weight: 700;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    nav a:hover {
+      color: var(--green-dark);
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 42px;
+      align-items: center;
+      padding: 80px 8% 60px;
+      min-height: 88vh;
+    }
+
+    .hero-left > * {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .hero-left h1 { animation-delay: 0.1s; }
+    .hero-left p { animation-delay: 0.25s; }
+    .hero-left .hero-buttons { animation-delay: 0.4s; }
+    .hero-left .stats { animation-delay: 0.55s; }
+
+    .hero h1 {
+      font-size: 3.7rem;
+      line-height: 1.05;
+      margin-bottom: 22px;
+      max-width: 650px;
+    }
+
+    .hero h1 span {
+      color: var(--green);
+    }
+
+    .hero p {
+      font-size: 1.12rem;
+      color: #4b5563;
+      max-width: 580px;
+      margin-bottom: 28px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 14px 24px rgba(0, 0, 0, 0.09);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--green-dark);
+      border: 2px solid #c8f2bb;
+    }
+
+    .stats {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 18px;
+      padding: 16px 20px;
+      min-width: 145px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+      transition: transform 0.25s ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-6px);
+    }
+
+    .stat h3 {
+      color: var(--green-dark);
+      font-size: 1.65rem;
+      font-weight: 800;
+    }
+
+    .stat p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .hero-right {
+      opacity: 0;
+      transform: translateY(30px) scale(0.96);
+      animation: popIn 0.9s ease 0.35s forwards;
+    }
+
+    .phone-card {
+      background: white;
+      border-radius: 34px;
+      padding: 24px;
+      box-shadow: 0 24px 55px rgba(43, 178, 76, 0.18);
+      max-width: 390px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      animation: floatCard 4s ease-in-out infinite;
+    }
+
+    .phone-card::before {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      background: rgba(88, 204, 2, 0.12);
+      border-radius: 50%;
+      top: -50px;
+      right: -35px;
+    }
+
+    .lesson-badge {
+      display: inline-block;
+      background: #ecfdf3;
+      color: var(--green-dark);
+      font-weight: 800;
+      padding: 8px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .question-box {
+      background: #f9fafb;
+      border-radius: 24px;
+      padding: 22px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .question-box h3 {
+      margin-bottom: 14px;
+      font-size: 1.28rem;
+      line-height: 1.35;
+    }
+
+    .answer {
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 10px;
+      cursor: pointer;
+      background: white;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      font-weight: 700;
+    }
+
+    .answer:hover {
+      border-color: var(--green);
+      background: #f3ffe8;
+      transform: scale(1.02);
+    }
+
+    .answer.correct {
+      border-color: var(--green);
+      background: #f3ffe8;
+    }
+
+    .answer.wrong {
+      border-color: #f59e0b;
+      background: #fff7ed;
+    }
+
+    .xp-box {
+      margin-top: 18px;
+      padding: 16px;
+      background: #fff7ed;
+      border-radius: 18px;
+      font-weight: 800;
+      color: #9a3412;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .xp-box.bump {
+      animation: bump 0.45s ease;
+    }
+
+    .section {
+      padding: 75px 8%;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 42px;
+    }
+
+    .section-title h2 {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .features-grid,
+    .how-it-works {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card,
+    .step {
+      background: white;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.05);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .feature-card:hover,
+    .step:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 30px rgba(0,0,0,0.08);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .feature-card h3,
+    .step h3 {
+      margin-bottom: 10px;
+      font-size: 1.25rem;
+    }
+
+    .feature-card p,
+    .step p {
+      color: var(--muted);
+    }
+
+    .step {
+      border: 2px solid #ecfdf3;
+      text-align: center;
+    }
+
+    .step-number {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.2rem;
+      margin: 0 auto 16px;
+      box-shadow: 0 10px 20px rgba(88, 204, 2, 0.25);
+    }
+
+    .cta {
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: white;
+      border-radius: 34px;
+      padding: 54px 8%;
+      margin: 30px 8% 70px;
+      text-align: center;
+      box-shadow: 0 18px 40px rgba(43, 178, 76, 0.2);
+    }
+
+    .cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 14px;
+    }
+
+    .cta p {
+      max-width: 700px;
+      margin: 0 auto 22px;
+      color: rgba(255,255,255,0.95);
+    }
+
+    footer {
+      text-align: center;
+      padding: 28px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes floatCard {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    @keyframes bump {
+      0% { transform: scale(1); }
+      35% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @media (max-width: 950px) {
+      .hero,
+      .features-grid,
+      .how-it-works {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 50px;
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+      }
+
+      nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">TaxQuest</div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#how">How It Works</a>
+      <a href="#start">Start</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-left">
+      <h1>Make filing taxes feel like <span>leveling up</span>.</h1>
+      <p>
+        TaxQuest turns confusing tax forms into bite-sized lessons, instant feedback,
+        and progress-based challenges so first-time filers can learn while they file.
+      </p>
+
+      <div class="hero-buttons">
+        <button class="btn btn-primary" onclick="scrollToSection('start')">Start Your Tax Journey</button>
+        <button class="btn btn-secondary" onclick="scrollToSection('features')">See Features</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <h3 id="xpCount">0 XP</h3>
+          <p>Earned today</p>
+        </div>
+        <div class="stat">
+          <h3>4 min</h3>
+          <p>Average lesson</p>
+        </div>
+        <div class="stat">
+          <h3>92%</h3>
+          <p>Completion demo rate</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="phone-card">
+        <div class="lesson-badge">Lesson 3 • Income Basics</div>
+        <div class="question-box">
+          <h3>You earned money from a campus job. Which form usually reports that income?</h3>
+          <div class="answer" onclick="selectAnswer(this, false)">1099-INT</div>
+          <div class="answer" onclick="selectAnswer(this, true)">W-2</div>
+          <div class="answer" onclick="selectAnswer(this, false)">Schedule C</div>
+        </div>
+        <div class="xp-box" id="feedbackBox">Choose an answer to earn XP and unlock your refund estimate.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="features">
+    <div class="section-title">
+      <h2>Why this feels different</h2>
+      <p>
+        Most tax tools assume you already understand taxes. TaxQuest teaches you one small step at a time.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Bite-Sized Lessons</h3>
+        <p>Each tax topic becomes a short challenge instead of a giant intimidating form.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Instant Feedback</h3>
+        <p>Users learn why an answer is right or wrong immediately, which reduces confusion and stress.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <h3>Gamified Progress</h3>
+        <p>XP, streaks, completion bars, and reward moments help users stay motivated all the way through filing.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="how">
+    <div class="section-title">
+      <h2>How it works</h2>
+      <p>Simple enough for a first-time filer. Engaging enough for a hackathon demo people will remember.</p>
+    </div>
+
+    <div class="how-it-works">
+      <div class="step">
+        <div class="step-number">1</div>
+        <h3>Answer quick questions</h3>
+        <p>Users work through simple, interactive prompts based on their income and tax situation.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <h3>Learn while filing</h3>
+        <p>Every step includes clear explanations so users understand the purpose of forms, deductions, and credits.</p>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <h3>Finish with confidence</h3>
+        <p>By the end, users have both a tax summary and a better understanding of how taxes work.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta reveal" id="start">
+    <h2>Turn tax season into progress season</h2>
+    <p>
+      Built for students, first-time filers, and anyone who has ever stared at a tax form and thought,
+      “I have no idea what this means.”
+    </p>
+    <button class="btn btn-secondary" style="background:white; color:#2bb24c; border:none;" onclick="startDemo(event)">
+      Launch Demo Mode
+    </button>
+  </section>
+
+  <footer>
+    TaxQuest • A hackathon concept for making taxes educational, approachable, and fun.
+  </footer>
+
+  <script>
+    let xp = 0;
+    let answered = false;
+
+    function selectAnswer(element, isCorrect) {
+      if (answered) return;
+      answered = true;
+
+      const answers = document.querySelectorAll('.answer');
+      const feedbackBox = document.getElementById('feedbackBox');
+      const xpCount = document.getElementById('xpCount');
+
+      answers.forEach(answer => {
+        answer.style.pointerEvents = 'none';
+        if (answer.textContent.trim() === 'W-2') {
+          answer.classList.add('correct');
+        }
+      });
+
+      if (!isCorrect) {
+        element.classList.add('wrong');
+        xp += 10;
+        feedbackBox.textContent = 'Nice try. A campus job is usually reported on a W-2. You still earned +10 XP for learning.';
+      } else {
+        xp += 25;
+        feedbackBox.textContent = 'Correct! W-2 income usually comes from an employer. +25 XP earned.';
+      }
+
+      xpCount.textContent = xp + ' XP';
+      feedbackBox.classList.remove('bump');
+      void feedbackBox.offsetWidth;
+      feedbackBox.classList.add('bump');
+    }
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function startDemo(event) {
+      const button = event.target;
+      const original = button.textContent;
+      button.textContent = 'Demo Started ✓';
+      button.style.transform = 'scale(1.03)';
+      setTimeout(() => {
+        button.textContent = original;
+        button.style.transform = 'scale(1)';
+      }, 1400);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.18 });
+
+    document.querySelectorAll('.reveal').forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>
