@@ -242,6 +242,27 @@
 			box-shadow: 0 6px 0 #000;
 		}
 
+		.header-links {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			margin-top: 14px;
+		}
+
+		.header-links .chip {
+			text-decoration: none;
+			display: inline-block;
+			transition: transform 0.15s ease, box-shadow 0.15s ease;
+			cursor: pointer;
+		}
+
+		.header-links .chip:hover,
+		.header-links .chip:focus-visible {
+			transform: translate(4px, 4px);
+			box-shadow: 4px 4px 0 #000;
+			outline: none;
+		}
+
 		.header-card h2 {
 			font-family: "Press Start 2P", cursive;
 			font-size: clamp(0.7rem, 1.7vw, 1rem);
@@ -473,12 +494,12 @@
 
 		.lesson.left .knight-marker,
 		.lesson.center .knight-marker {
-			right: 140px;
+			right: 210px;
 			transform: translateY(-50%);
 		}
 
 		.lesson.right .knight-marker {
-			left: 140px;
+			left: 210px;
 			transform: translateY(-50%) scaleX(-1);
 		}
 
@@ -675,10 +696,8 @@
 
 		<section class="layout">
 			<aside class="sidebar pixel-panel" aria-label="Track Selection">
-				<h1 class="title">Choose Tax Track</h1>
-				<p class="subtitle">Pick your filing path and level up through lessons.</p>
-
-				<div class="track-list" id="trackList"></div>
+				<h1 class="title">Roadmap Guide</h1>
+				<p class="subtitle">Your active track is selected on the home page.</p>
 
 				<div class="legend" aria-label="Legend">
 					<div class="legend-row"><span class="tiny-node open"></span> Open lesson</div>
@@ -692,9 +711,9 @@
 					<h2 id="trackTitle">W-2 EMPLOYEE TRACK</h2>
 					<p id="trackDescription">Learn to read your W-2, collect standard deductions, and file with confidence.</p>
 					<div class="chip-row" id="focusChips"></div>
-					<div class="chip-row">
+					<div class="header-links">
 						<a class="chip hub-link" id="startTrackLink" href="levels/w2-level-1.html">Start Track Levels</a>
-						<a class="chip hub-link" href="levels/index.html">Open All Level Pages</a>
+						<a class="chip hub-link" id="backHomeLink" href="index.html">Back to Home</a>
 					</div>
 				</section>
 
@@ -757,7 +776,8 @@
 
 		const pattern = ["center", "left", "right", "left", "center", "right"];
 		const progressKey = "taxquest-progress-v1";
-		let currentTrack = tracks[0];
+		const trackParam = new URLSearchParams(window.location.search).get("track");
+		let currentTrack = tracks.find((track) => track.key === trackParam) || tracks[0];
 		let xp = 120;
 
 		const trackLessonUrls = {
@@ -784,7 +804,6 @@
 			]
 		};
 
-		const trackList = document.getElementById("trackList");
 		const roadmap = document.getElementById("roadmap");
 		const trackTitle = document.getElementById("trackTitle");
 		const trackDescription = document.getElementById("trackDescription");
@@ -793,6 +812,7 @@
 		const xpFill = document.getElementById("xpFill");
 		const xpText = document.getElementById("xpText");
 		const startTrackLink = document.getElementById("startTrackLink");
+		const backHomeLink = document.getElementById("backHomeLink");
 
 		const trackStartMap = {
 			w2: "levels/w2-level-1.html",
@@ -843,26 +863,11 @@
 			return urls[urls.length - 1] || trackStartMap[trackKey] || "levels/index.html";
 		}
 
-		function drawTracks() {
-			trackList.innerHTML = "";
-			tracks.forEach((track) => {
-				const button = document.createElement("button");
-				button.className = `track-btn${track.key === currentTrack.key ? " active" : ""}`;
-				button.textContent = track.name;
-				button.addEventListener("click", () => {
-					currentTrack = track;
-					drawTracks();
-					drawHeader();
-					drawRoadmap();
-				});
-				trackList.appendChild(button);
-			});
-		}
-
 		function drawHeader() {
 			trackTitle.textContent = currentTrack.title;
 			trackDescription.textContent = currentTrack.description;
 			startTrackLink.href = nextTrackUrl(currentTrack.key);
+			backHomeLink.href = "index.html";
 			focusChips.innerHTML = "";
 			currentTrack.focus.forEach((item) => {
 				const chip = document.createElement("span");
@@ -870,6 +875,7 @@
 				chip.textContent = item;
 				focusChips.appendChild(chip);
 			});
+			document.title = `${currentTrack.title} | TaxQuest 8-Bit Roadmap`;
 		}
 
 		function drawRoadmap() {
@@ -993,7 +999,6 @@
 			xpText.textContent = `${xp} / 500`;
 		}
 
-		drawTracks();
 		drawHeader();
 		drawRoadmap();
 		lessonPrompt.textContent = "Open lessons are gold. Completed lessons are green. Finish a level to unlock the next.";

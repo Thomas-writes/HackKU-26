@@ -27,6 +27,15 @@
     nextLink: document.getElementById("nextLink")
   };
 
+  const roadmapKey = data.file.startsWith("w2-")
+    ? "w2"
+    : data.file.startsWith("self1099-")
+      ? "self1099"
+      : data.file.startsWith("investor1099b-")
+        ? "investor1099b"
+        : "";
+  const roadmapUrl = roadmapKey ? `../roadmap.html?track=${roadmapKey}` : "../roadmap.html";
+
   el.track.textContent = data.track + " - " + data.level;
   el.title.textContent = data.title;
   el.intro.textContent = data.intro;
@@ -421,7 +430,7 @@
     finalAction.textContent = data.next ? "Next Level" : "Back to Roadmap";
     finalAction.disabled = false;
     finalAction.onclick = () => {
-      window.location.href = data.next || "../roadmap.html";
+      window.location.href = data.next || roadmapUrl;
     };
 
     finalResult.className = "result success";
