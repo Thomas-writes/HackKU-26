@@ -81,7 +81,6 @@
 			font-family: "Press Start 2P", cursive;
 			font-size: clamp(0.8rem, 2vw, 1rem);
 			color: var(--pixel-green);
-			text-shadow: 3px 3px 0 #000;
 			line-height: 1.5;
 		}
 
@@ -500,6 +499,7 @@
 			border-radius: 0 !important;
 			animation: none !important;
 			transition: none !important;
+			text-shadow: none !important;
 		}
 
 		body {
@@ -552,7 +552,6 @@
 		.badge,
 		.status,
 		.track-btn.active,
-		.track-btn:hover,
 		.xp-fill,
 		.hub-link {
 			background: var(--gold-coin) !important;
@@ -688,6 +687,30 @@
 		let currentTrack = tracks[0];
 		let xp = 120;
 
+		const trackLessonUrls = {
+			w2: [
+				"levels/w2-level-1.html",
+				"levels/w2-level-2.html",
+				"levels/w2-level-3.html",
+				"levels/w2-level-4.html",
+				"levels/w2-level-5.html"
+			],
+			self1099: [
+				"levels/self1099-level-1.html",
+				"levels/self1099-level-2.html",
+				"levels/self1099-level-3.html",
+				"levels/self1099-level-4.html",
+				"levels/self1099-level-5.html"
+			],
+			investor1099b: [
+				"levels/investor1099b-level-1.html",
+				"levels/investor1099b-level-2.html",
+				"levels/investor1099b-level-3.html",
+				"levels/investor1099b-level-4.html",
+				"levels/investor1099b-level-5.html"
+			]
+		};
+
 		const trackList = document.getElementById("trackList");
 		const roadmap = document.getElementById("roadmap");
 		const trackTitle = document.getElementById("trackTitle");
@@ -748,6 +771,7 @@
 				node.className = `node ${lesson.state}`;
 				node.style.setProperty("--i", String(index));
 				node.setAttribute("aria-label", `${lesson.title} ${lesson.state}`);
+				const lessonUrl = trackLessonUrls[currentTrack.key]?.[index];
 
 				node.innerHTML = `
 					<div class="node-top">
@@ -764,21 +788,8 @@
 						return;
 					}
 
-					if (lesson.state === "done") {
-						lessonPrompt.textContent = `Replay unlocked: ${lesson.title}. Nice review run.`;
-						return;
-					}
-
-					lesson.state = "done";
-					const nextLesson = currentTrack.lessons[index + 1];
-					if (nextLesson && nextLesson.state === "locked") {
-						nextLesson.state = "open";
-					}
-
-					xp = Math.min(500, xp + 45);
-					updateXP();
-					drawRoadmap();
-					lessonPrompt.textContent = `Quest cleared: ${lesson.title}. You gained +45 XP.`;
+						lessonPrompt.textContent = `Opening ${lesson.title}...`;
+						window.location.href = lessonUrl || "levels/index.html";
 				});
 
 				wrap.appendChild(node);
