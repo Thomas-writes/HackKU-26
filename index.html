@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tax Quest - Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment-cream: #FFF8E7;
+      --aged-scroll: #F5E6D3;
+      --ancient-paper: #E8D4B8;
+      --dragon-fire: #E63946;
+      --gold-coin: #FFB703;
+      --health-potion: #06A77D;
+      --dungeon-purple: #6A4C93;
+      --shadow-black: #1D1D1D;
+      --stone-gray: #686868;
+      --pixel-white: #FFFFFF;
+      --border: 4px solid var(--shadow-black);
+      --shadow: 8px 8px 0 var(--shadow-black);
+      --space-1: 8px;
+      --space-2: 16px;
+      --space-3: 24px;
+      --space-4: 32px;
+      --space-5: 40px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      image-rendering: pixelated;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Press Start 2P', cursive;
+      background-image: url('./imgs/cobble.png');
+      background-repeat: repeat;
+
+      background-size: auto;
+      background-position: top left;
+
+      color: var(--shadow-black);
+      min-height: 100vh;
+      line-height: 1.8;
+      padding: var(--space-3);
+    }
+
+    button {
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    .page {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      border: var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .header {
+      background: var(--aged-scroll);
+      padding: var(--space-2) var(--space-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-4);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 52px;
+      height: 52px;
+      border: var(--border);
+      background: var(--dragon-fire);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .brand-icon::before,
+    .brand-icon::after {
+      content: "";
+      position: absolute;
+      border: var(--border);
+    }
+
+    .brand-icon::before {
+      width: 12px;
+      height: 12px;
+      right: 4px;
+      top: 4px;
+      background: var(--gold-coin);
+    }
+
+    .brand-icon::after {
+      width: 16px;
+      height: 16px;
+      left: 8px;
+      bottom: 8px;
+      background: var(--health-potion);
+    }
+
+    .brand-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      text-transform: uppercase;
+    }
+
+    .brand-sub {
+      display: block;
+      color: var(--stone-gray);
+      font-size: 0.52rem;
+      margin-top: 4px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: var(--gold-coin);
+      color: var(--shadow-black);
+      padding: 14px 18px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-size: 0.62rem;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translate(4px, 4px);
+      box-shadow: 4px 4px 0 var(--shadow-black);
+      outline: none;
+    }
+
+    .btn-login {
+      background: var(--pixel-white);
+    }
+
+    .btn-signup {
+      background: var(--health-potion);
+      color: var(--pixel-white);
+    }
+
+    .btn-start {
+      background: var(--health-potion);
+      color: var(--pixel-white);
+    }
+
+    .btn-magic {
+      background: var(--dungeon-purple);
+      color: var(--pixel-white);
+    }
+
+    .btn-card-main {
+      color: var(--pixel-white);
+    }
+
+    .btn-card-w2 {
+      background: var(--dragon-fire);
+      color: var(--pixel-white);
+    }
+
+    .btn-card-1099 {
+      background: var(--dungeon-purple);
+      color: var(--pixel-white);
+    }
+
+    .btn-card-1099b {
+      background: var(--health-potion);
+      color: var(--pixel-white);
+    }
+
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+      align-items: stretch;
+    }
+
+    .hero-copy,
+    .hero-visual,
+    .class-card,
+    .footer,
+    .modal-box {
+      padding: var(--space-3);
+    }
+
+    .hero-copy {
+      background: var(--aged-scroll);
+    }
+
+    .knight-marker {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      width: 60%;
+      height: auto;
+
+      transform: translate(-50%, -50%);
+      image-rendering: pixelated;
+
+      z-index: 5;
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+
+      filter: drop-shadow(6px 6px 0 #000);
+
+      animation: knightBob 1.2s ease-in-out infinite;
+    }
+
+		@keyframes knightBob {
+			0% { margin-top: -2px; }
+			50% { margin-top: 2px; }
+			100% { margin-top: -2px; }
+		}
+
+    .eyebrow {
+      display: inline-block;
+      border: var(--border);
+      box-shadow: 4px 4px 0 var(--shadow-black);
+      background: var(--gold-coin);
+      padding: 10px 14px;
+      margin-bottom: var(--space-3);
+      font-size: 0.58rem;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(1.4rem, 3vw, 2.6rem);
+      line-height: 1.45;
+      margin-bottom: var(--space-3);
+      text-transform: uppercase;
+      text-shadow: 4px 4px 0 var(--ancient-paper);
+    }
+
+    h2 {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: var(--space-2);
+      text-transform: uppercase;
+    }
+
+    p,
+    .small,
+    .class-meta,
+    .modal-text,
+    .btn {
+      font-size: 0.62rem;
+    }
+
+    .hero-copy p {
+      max-width: 90%;
+      margin-bottom: var(--space-3);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .hero-visual {
+      background: var(--ancient-paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 420px;
+    }
+
+    .dragon-frame {
+      width: 100%;
+      max-width: 420px;
+      min-height: 280px;
+      border: var(--border);
+      background: var(--parchment-cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-3);
+    }
+
+    .dragon {
+      width: 160px;
+      height: 120px;
+      position: relative;
+    }
+
+    .dragon-part {
+      position: absolute;
+      border: var(--border);
+      background: var(--dragon-fire);
+    }
+
+    .dragon-body { width: 80px; height: 40px; left: 36px; top: 46px; }
+    .dragon-head { width: 32px; height: 28px; left: 108px; top: 28px; }
+    .dragon-wing { width: 44px; height: 32px; left: 12px; top: 14px; }
+    .dragon-tail { width: 28px; height: 12px; left: 4px; top: 66px; }
+    .dragon-leg-1 { width: 14px; height: 24px; left: 46px; top: 86px; }
+    .dragon-leg-2 { width: 14px; height: 24px; left: 82px; top: 86px; }
+    .dragon-fire { width: 22px; height: 12px; left: 138px; top: 38px; background: var(--gold-coin); }
+
+    .class-section {
+      margin-bottom: var(--space-5);
+    }
+
+    .section-head {
+      margin-bottom: var(--space-3);
+      padding: var(--space-3);
+      background: var(--aged-scroll);
+    }
+
+    .class-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+    }
+
+    .class-card {
+      background: var(--aged-scroll);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      min-height: 340px;
+      position: relative;
+    }
+
+    .class-card.selected {
+      transform: none;
+      box-shadow: var(--shadow);
+    }
+
+    .class-top {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .class-badge {
+      display: inline-block;
+      width: fit-content;
+      border: var(--border);
+      box-shadow: 4px 4px 0 var(--shadow-black);
+      padding: 10px 12px;
+      font-size: 0.56rem;
+      text-transform: uppercase;
+    }
+
+    .badge-w2 { background: var(--dragon-fire); color: var(--pixel-white); }
+    .badge-1099 { background: var(--dungeon-purple); color: var(--pixel-white); }
+    .badge-1099b { background: var(--health-potion); color: var(--pixel-white); }
+
+    .class-title {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      text-transform: uppercase;
+    }
+
+    .class-meta {
+      color: var(--stone-gray);
+      min-height: 72px;
+    }
+
+    .class-image-frame {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: var(--space-2) 0;
+    }
+
+    .class-image-inner {
+      width: 300px;
+      height: 300px;
+      border: var(--border);
+      background: var(--ancient-paper);
+      display: block;
+
+      position: relative; /* IMPORTANT */
+      overflow: hidden;
+    }
+
+    
+
+    .card-actions {
+      margin-top: var(--space-3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card-actions .btn {
+      width: 100%;
+      max-width: 260px;
+      text-align: center;
+    }
+
+    .footer {
+      background: var(--gold-coin);
+      text-align: center;
+      font-size: 0.58rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(29,29,29,0.86);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-3);
+      z-index: 10;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-box {
+      width: min(760px, 100%);
+      background: var(--parchment-cream);
+      border: var(--border);
+      box-shadow: 12px 12px 0 var(--gold-coin);
+    }
+
+    .modal-title {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: var(--space-2);
+      text-transform: uppercase;
+    }
+
+    .modal-text {
+      margin-bottom: var(--space-3);
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    @media (max-width: 1160px) {
+      .hero,
+      .class-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy p {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: var(--space-2);
+      }
+
+      .header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .brand {
+        justify-content: center;
+      }
+
+      .header-actions {
+        justify-content: center;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+      }
+
+      h2,
+      .class-title,
+      .modal-title {
+        font-size: 0.8rem;
+      }
+
+      p,
+      .small,
+      .class-meta,
+      .modal-text,
+      .btn,
+      .eyebrow,
+      .brand-sub {
+        font-size: 0.52rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header panel">
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true"></div>
+        <div class="brand-text">
+          Tax Quest
+          <span class="brand-sub">Making Taxes Legendary Since 2026</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-login" id="loginBtn" href="./loginsignup/login.html">Log In</button>
+        <button class="btn btn-signup" id="signupBtn">Sign Up</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy panel">
+        <div class="eyebrow">8-Bit Tax Adventure</div>
+        <h1>Fight the Tax Dragon!</h1>
+        <h2>Choose Your Class And Begin Your Quest</h2>
+        <p>
+          Tax Quest turns filing into a retro adventure. Pick the class that matches your tax situation and prepare to take on the dragon at the end of the journey.
+        </p>
+        <p>
+          This homepage keeps things simple: choose a path, sign in, and begin your quest.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-start" id="startJourneyBtn">Start Quest</button>
+          <button class="btn btn-magic" id="magicInfoBtn">How It Works</button>
+        </div>
+      </div>
+
+      </section>
+
+    <section class="class-section" id="choose-path">
+      <div class="section-head panel">
+        <h2>Choose Your Adventure Path</h2>
+        <p>
+          Pick the route that best matches your tax journey.
+        </p>
+      </div>
+
+      <div class="class-grid">
+        <article class="class-card panel selected" data-class="W-2 Warrior">
+          <div class="class-top">
+            <div class="class-badge badge-w2">W-2 Warrior</div>
+            <div class="class-title">Battle the Wage Dragon</div>
+            <div class="class-meta">Steady route. Beginner-friendly. Best for traditional job income.</div>
+          </div>
+
+          <div class="class-image-frame">
+            <div class="class-image-inner">
+              <img src="./imgs/knight.png" class="knight-marker">
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-card-main btn-card-w2 select-class">Choose W-2</button>
+          </div>
+        </article>
+
+        <article class="class-card panel" data-class="1099 Mage">
+          <div class="class-top">
+            <div class="class-badge badge-1099">1099 Mage</div>
+            <div class="class-title">Master of Deductions</div>
+            <div class="class-meta">Flexible route. More strategy. Best for freelance and contract income.</div>
+          </div>
+
+          <div class="class-image-frame">
+            <div class="class-image-inner"></div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-card-main btn-card-1099 select-class">Choose 1099</button>
+          </div>
+        </article>
+
+        <article class="class-card panel" data-class="1099-B Ranger">
+          <div class="class-top">
+            <div class="class-badge badge-1099b">1099-B Ranger</div>
+            <div class="class-title">Hunter of Capital Gains</div>
+            <div class="class-meta">Precision route. Higher complexity. Best for investment and trading income.</div>
+          </div>
+
+          <div class="class-image-frame">
+            <div class="class-image-inner"></div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn btn-card-main btn-card-1099b select-class">Choose 1099-B</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer panel">
+      Tax Quest - Home Base for Legendary Filers
+    </footer>
+  </div>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-title" id="modalTitle">Quest Notice</div>
+      <div class="modal-text" id="modalText"></div>
+      <div class="modal-actions">
+        <button class="btn" id="confirmBtn">Continue</button>
+        <button class="btn btn-signup" id="closeBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.class-card');
+    const selectButtons = document.querySelectorAll('.select-class');
+        const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const confirmBtn = document.getElementById('confirmBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const startJourneyBtn = document.getElementById('startJourneyBtn');
+    const magicInfoBtn = document.getElementById('magicInfoBtn');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+
+    let selectedClass = 'W-2 Warrior';
+
+    function openModal(title, text) {
+      modalTitle.textContent = title;
+      modalText.textContent = text;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function setSelected(card) {
+      cards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedClass = card.dataset.class;
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') {
+          setSelected(card);
+        }
+      });
+    });
+
+    selectButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const card = e.target.closest('.class-card');
+        setSelected(card);
+        openModal(
+          `${card.dataset.class.toUpperCase()} SELECTED`,
+          `${card.dataset.class} is now your active class. Continue to sign up or log in to begin your adventure.`
+        );
+      });
+    });
+
+
+    startJourneyBtn.addEventListener('click', () => {
+      document.getElementById('choose-path').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    magicInfoBtn.addEventListener('click', () => {
+      openModal(
+        'HOW IT WORKS',
+        'Choose a class on the homepage, then sign up or log in to begin the full adventure path.'
+      );
+    });
+
+    loginBtn.addEventListener('click', () => {
+      window.location.href = './loginsignup/login.html';
+    });
+
+    signupBtn.addEventListener('click', () => {
+      window.location.href = './loginsignup/signup.html';
+    });
+
+    confirmBtn.addEventListener('click', closeModal);
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+</body>
+</html>
