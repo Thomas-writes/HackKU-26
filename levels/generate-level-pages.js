@@ -453,8 +453,14 @@ const pageHtml = (item) => `<!DOCTYPE html>
 </body>
 </html>`;
 
-fs.writeFileSync(path.join(outDir, 'level-base.css'), css, 'utf8');
-fs.writeFileSync(path.join(outDir, 'level-base.js'), js, 'utf8');
+const levelBaseCssPath = path.join(outDir, 'level-base.css');
+const levelBaseJsPath = path.join(outDir, 'level-base.js');
+if (!fs.existsSync(levelBaseCssPath)) {
+  fs.writeFileSync(levelBaseCssPath, css, 'utf8');
+}
+if (!fs.existsSync(levelBaseJsPath)) {
+  fs.writeFileSync(levelBaseJsPath, js, 'utf8');
+}
 levels.forEach((item) => {
   fs.writeFileSync(path.join(outDir, item.file), pageHtml(item), 'utf8');
 });
@@ -489,5 +495,8 @@ const indexHtml = `<!DOCTYPE html>
   </main>
 </body>
 </html>`;
-fs.writeFileSync(path.join(outDir, 'index.html'), indexHtml, 'utf8');
+const levelIndexPath = path.join(outDir, 'index.html');
+if (!fs.existsSync(levelIndexPath)) {
+  fs.writeFileSync(levelIndexPath, indexHtml, 'utf8');
+}
 console.log(`Generated ${levels.length} level pages plus shared assets.`);
