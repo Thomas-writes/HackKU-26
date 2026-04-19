@@ -289,7 +289,7 @@
       <h1>Log In</h1>
       <p class="subtitle">Sign in to continue.</p>
 
-      <form>
+      <form id="loginForm">
         <div class="form-group">
           <label for="email">Email</label>
           <input id="email" name="email" type="email" placeholder="Email" />
@@ -304,8 +304,10 @@
 
         <div class="divider">or</div>
 
-        <button class="btn btn-google" type="button">Sign in with Google</button>
+        <button class="btn btn-google" id="googleLoginBtn" type="button">Sign in with Google</button>
       </form>
+
+      <p id="message" class="helper"></p>
 
       <p class="helper">
         Don’t have an account? <a href="signup.html">Sign up</a>
@@ -316,5 +318,60 @@
       Tax Quest - Home Base for Legendary Filers
     </footer>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWNfkXZgU9F6qmiiVyUAFYKJ45g1DytT4",
+      authDomain: "hackku26.firebaseapp.com",
+      projectId: "hackku26",
+      storageBucket: "hackku26.firebasestorage.app",
+      messagingSenderId: "866677744105",
+      appId: "1:866677744105:web:1278957a9058ac0f422b78",
+      measurementId: "G-5EJ4KBGBDG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const form = document.getElementById('loginForm');
+    const googleBtn = document.getElementById('googleLoginBtn');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      message.textContent = '';
+
+      try {
+        await signInWithEmailAndPassword(
+          auth,
+          document.getElementById('email').value,
+          document.getElementById('password').value
+        );
+        window.location.href = '../index.html';
+      } catch (err) {
+        message.textContent = err.message;
+      }
+    });
+
+    googleBtn.addEventListener('click', async () => {
+      message.textContent = '';
+
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+        window.location.href = '../index.html';
+      } catch (err) {
+        message.textContent = err.message;
+      }
+    });
+  </script>
 </body>
 </html>

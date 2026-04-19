@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" type="image/png" href="./imgs/favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tax Quest - Home</title>
@@ -234,11 +235,11 @@
       animation: knightBob 1.2s ease-in-out infinite;
     }
 
-		@keyframes knightBob {
-			0% { margin-top: -2px; }
-			50% { margin-top: 2px; }
-			100% { margin-top: -2px; }
-		}
+    @keyframes knightBob {
+      0% { margin-top: -2px; }
+      50% { margin-top: 2px; }
+      100% { margin-top: -2px; }
+    }
 
     .eyebrow {
       display: inline-block;
@@ -400,7 +401,7 @@
       background: var(--ancient-paper);
       display: block;
 
-      position: relative; /* IMPORTANT */
+      position: relative;
       overflow: hidden;
     }
 
@@ -420,8 +421,6 @@
       50% { transform: translateY(2px); }
       100% { transform: translateY(-2px); }
     }
-
-    
 
     .card-actions {
       margin-top: var(--space-3);
@@ -543,7 +542,7 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="btn btn-login" id="loginBtn" href="./loginsignup/login.html">Log In</button>
+        <button class="btn btn-login" id="loginBtn">Log In</button>
         <button class="btn btn-signup" id="signupBtn">Sign Up</button>
       </div>
     </header>
@@ -564,8 +563,7 @@
           <button class="btn btn-magic" id="magicInfoBtn">How It Works</button>
         </div>
       </div>
-
-      </section>
+    </section>
 
     <section class="class-section" id="choose-path">
       <div class="section-head panel">
@@ -646,10 +644,30 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWNfkXZgU9F6qmiiVyUAFYKJ45g1DytT4",
+      authDomain: "hackku26.firebaseapp.com",
+      projectId: "hackku26",
+      storageBucket: "hackku26.firebasestorage.app",
+      messagingSenderId: "866677744105",
+      appId: "1:866677744105:web:1278957a9058ac0f422b78",
+      measurementId: "G-5EJ4KBGBDG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
     const cards = document.querySelectorAll('.class-card');
     const selectButtons = document.querySelectorAll('.select-class');
-        const modal = document.getElementById('modal');
+    const modal = document.getElementById('modal');
     const modalTitle = document.getElementById('modalTitle');
     const modalText = document.getElementById('modalText');
     const confirmBtn = document.getElementById('confirmBtn');
@@ -696,7 +714,6 @@
       });
     });
 
-
     startJourneyBtn.addEventListener('click', () => {
       document.getElementById('choose-path').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -708,12 +725,31 @@
       );
     });
 
-    loginBtn.addEventListener('click', () => {
-      window.location.href = './loginsignup/login.html';
+    loginBtn.addEventListener('click', async () => {
+      if (auth.currentUser) {
+        try {
+          await signOut(auth);
+          window.location.href = './index.html';
+        } catch (err) {
+          openModal('LOGOUT ERROR', err.message);
+        }
+      } else {
+        window.location.href = './loginsignup/login.html';
+      }
     });
 
     signupBtn.addEventListener('click', () => {
       window.location.href = './loginsignup/signup.html';
+    });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        loginBtn.textContent = 'Log Out';
+        signupBtn.style.display = 'none';
+      } else {
+        loginBtn.textContent = 'Log In';
+        signupBtn.style.display = 'inline-block';
+      }
     });
 
     confirmBtn.addEventListener('click', closeModal);

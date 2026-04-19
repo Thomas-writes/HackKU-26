@@ -236,47 +236,13 @@
       padding: var(--space-3);
       font-size: 0.52rem;
     }
-
-    @media (max-width: 760px) {
-      body {
-        padding: var(--space-2);
-      }
-
-      .header {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .brand {
-        justify-content: center;
-      }
-
-      .auth-wrap {
-        padding: var(--space-3);
-      }
-
-      h1 {
-        font-size: 0.95rem;
-      }
-
-      .subtitle,
-      label,
-      input,
-      .btn,
-      .helper,
-      .footer,
-      .back-link,
-      .brand-sub {
-        font-size: 0.5rem;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="page">
     <header class="header panel">
       <div class="brand">
-        <div class="brand-icon" aria-hidden="true"></div>
+        <div class="brand-icon"></div>
         <div class="brand-text">
           Tax Quest
           <span class="brand-sub">Making Taxes Legendary Since 2026</span>
@@ -289,23 +255,27 @@
       <h1>Sign Up</h1>
       <p class="subtitle">Create an account to get started.</p>
 
-      <form>
+      <form id="signupForm">
         <div class="form-group">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="Email" />
+          <label>Email</label>
+          <input id="email" type="email" placeholder="Email" />
         </div>
 
         <div class="form-group">
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" placeholder="Password" />
+          <label>Password</label>
+          <input id="password" type="password" placeholder="Password" />
         </div>
 
         <button class="btn" type="submit">Sign Up</button>
 
         <div class="divider">or</div>
 
-        <button class="btn btn-google" type="button">Continue with Google</button>
+        <button class="btn btn-google" id="googleSignupBtn" type="button">
+          Continue with Google
+        </button>
       </form>
+
+      <p id="message" class="helper"></p>
 
       <p class="helper">
         Already have an account? <a href="login.html">Log in</a>
@@ -316,5 +286,60 @@
       Tax Quest - Home Base for Legendary Filers
     </footer>
   </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWNfkXZgU9F6qmiiVyUAFYKJ45g1DytT4",
+      authDomain: "hackku26.firebaseapp.com",
+      projectId: "hackku26",
+      storageBucket: "hackku26.firebasestorage.app",
+      messagingSenderId: "866677744105",
+      appId: "1:866677744105:web:1278957a9058ac0f422b78",
+      measurementId: "G-5EJ4KBGBDG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const form = document.getElementById('signupForm');
+    const googleBtn = document.getElementById('googleSignupBtn');
+    const message = document.getElementById('message');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      message.textContent = '';
+
+      try {
+        await createUserWithEmailAndPassword(
+          auth,
+          document.getElementById('email').value,
+          document.getElementById('password').value
+        );
+        window.location.href = '../index.html';
+      } catch (err) {
+        message.textContent = err.message;
+      }
+    });
+
+    googleBtn.addEventListener('click', async () => {
+      message.textContent = '';
+
+      try {
+        const provider = new GoogleAuthProvider();
+        await signInWithPopup(auth, provider);
+        window.location.href = '../index.html';
+      } catch (err) {
+        message.textContent = err.message;
+      }
+    });
+  </script>
 </body>
 </html>
