@@ -44,10 +44,8 @@
       font-family: 'Press Start 2P', cursive;
       background-image: url('./imgs/cobble.png');
       background-repeat: repeat;
-
       background-size: auto;
       background-position: top left;
-
       color: var(--shadow-black);
       min-height: 100vh;
       line-height: 1.8;
@@ -89,33 +87,21 @@
       width: 52px;
       height: 52px;
       border: var(--border);
+      box-shadow: var(--shadow);
       background: var(--dragon-fire);
-      position: relative;
-      flex-shrink: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .brand-icon::before,
-    .brand-icon::after {
-      content: "";
-      position: absolute;
-      border: var(--border);
+    .brand-icon img {
+      width: 70%;
+      height: 70%;
+      object-fit: contain;
+      image-rendering: pixelated;
     }
 
-    .brand-icon::before {
-      width: 12px;
-      height: 12px;
-      right: 4px;
-      top: 4px;
-      background: var(--gold-coin);
-    }
-
-    .brand-icon::after {
-      width: 16px;
-      height: 16px;
-      left: 8px;
-      bottom: 8px;
-      background: var(--health-potion);
-    }
 
     .brand-text {
       font-size: 0.9rem;
@@ -193,7 +179,6 @@
       color: var(--pixel-white);
     }
 
-
     .hero {
       display: grid;
       grid-template-columns: 1fr;
@@ -214,24 +199,52 @@
       background: var(--aged-scroll);
     }
 
+    .hero-copy-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: var(--space-3);
+      align-items: center;
+    }
+
+    .hero-copy-text p {
+      max-width: 100%;
+      margin-bottom: var(--space-3);
+    }
+
+    .hero-image-frame {
+      width: 300px;
+      height: 300px;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: var(--ancient-paper);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      justify-self: end;
+    }
+
+    .hero-image-frame img {
+      width: 78%;
+      height: 78%;
+      object-fit: contain;
+      image-rendering: pixelated;
+      animation: classSpriteBob 1.2s steps(2, end) infinite;
+    }
+
     .knight-marker {
       position: absolute;
       top: 50%;
       left: 50%;
-
       width: 60%;
       height: auto;
-
       transform: translate(-50%, -50%);
       image-rendering: pixelated;
-
       z-index: 5;
       border: none !important;
       box-shadow: none !important;
       background: transparent !important;
-
       filter: drop-shadow(6px 6px 0 #000);
-
       animation: knightBob 1.2s ease-in-out infinite;
     }
 
@@ -398,9 +411,9 @@
       width: 300px;
       height: 300px;
       border: var(--border);
+      box-shadow: var(--shadow);
       background: var(--ancient-paper);
       display: block;
-
       position: relative;
       overflow: hidden;
     }
@@ -489,6 +502,14 @@
       .hero-copy p {
         max-width: 100%;
       }
+
+      .hero-copy-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-image-frame {
+        justify-self: start;
+      }
     }
 
     @media (max-width: 760px) {
@@ -528,6 +549,11 @@
       .brand-sub {
         font-size: 0.52rem;
       }
+
+      .hero-image-frame {
+        width: 100%;
+        max-width: 300px;
+      }
     }
   </style>
 </head>
@@ -535,10 +561,12 @@
   <div class="page">
     <header class="header panel">
       <div class="brand">
-        <div class="brand-icon" aria-hidden="true"></div>
+        <div class="brand-icon">
+          <img src="./imgs/file.png" alt="Tax Quest Icon">
+        </div>
         <div class="brand-text">
           Tax Quest
-          <span class="brand-sub">Making Taxes Legendary Since 2026</span>
+          <span class="brand-sub">Gamify your taxes</span>
         </div>
       </div>
       <div class="header-actions">
@@ -549,18 +577,26 @@
 
     <section class="hero">
       <div class="hero-copy panel">
-        <div class="eyebrow">8-Bit Tax Adventure</div>
-        <h1>Fight the Tax Dragon!</h1>
-        <h2>Choose Your Class And Begin Your Quest</h2>
-        <p>
-          Tax Quest turns filing into a retro adventure. Pick the class that matches your tax situation and prepare to take on the dragon at the end of the journey.
-        </p>
-        <p>
-          This homepage keeps things simple: choose a path, sign in, and begin your quest.
-        </p>
-        <div class="hero-actions">
-          <button class="btn btn-start" id="startJourneyBtn">Start Quest</button>
-          <button class="btn btn-magic" id="magicInfoBtn">How It Works</button>
+        <div class="hero-copy-layout">
+          <div class="hero-copy-text">
+            <div class="eyebrow">8-Bit Tax Adventure</div>
+            <h1>Fight the Tax Dragon!</h1>
+            <h2>Choose Your Class And Begin Your Quest</h2>
+            <p>
+              Tax Quest turns filing into a retro adventure. Pick the class that matches your tax situation and prepare to take on the dragon at the end of the journey.
+            </p>
+            <p>
+              This homepage keeps things simple: choose a path, sign in, and begin your quest.
+            </p>
+            <div class="hero-actions">
+              <button class="btn btn-start" id="startJourneyBtn">Start Quest</button>
+              <button class="btn btn-magic" id="magicInfoBtn">How It Works</button>
+            </div>
+          </div>
+
+          <div class="hero-image-frame">
+            <img src="./imgs/dragon.png" alt="Tax Quest hero character" />
+          </div>
         </div>
       </div>
     </section>
@@ -629,7 +665,7 @@
     </section>
 
     <footer class="footer panel">
-      Tax Quest - Home Base for Legendary Filers
+      Created by Molly, Spencer, and Thomas
     </footer>
   </div>
 
