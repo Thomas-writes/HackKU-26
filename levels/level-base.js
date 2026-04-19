@@ -1,6 +1,33 @@
-(function () {
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAWNfkXZgU9F6qmiiVyUAFYKJ45g1DytT4",
+  authDomain: "hackku26.firebaseapp.com",
+  projectId: "hackku26",
+  storageBucket: "hackku26.firebasestorage.app",
+  messagingSenderId: "866677744105",
+  appId: "1:866677744105:web:1278957a9058ac0f422b78",
+  measurementId: "G-5EJ4KBGBDG"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+(async function () {
   const data = window.LEVEL_DATA;
   if (!data) return;
+
+  const waitForCurrentUser = () => new Promise((resolve) => {
+    let unsubscribe = () => {};
+    unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
 
   const panelList = document.querySelectorAll(".grid .card");
   const questionCard = panelList[0];
@@ -8,7 +35,7 @@
   const mainElement = document.querySelector(".main");
   const gridSection = document.querySelector(".grid");
   const pageElement = document.querySelector(".page");
-  const progressKey = "taxquest-progress-v1";
+  const progressKeyBase = "taxquest-progress-v1";
 
   questionCard.classList.add("question-card");
   finalCard.classList.add("tax-form-card");
@@ -38,6 +65,29 @@
   const isFinalBossLevel = /-level-5\.html$/i.test(data.file || "");
   const hasFinalSection = Boolean(data.final && Array.isArray(data.final.answers) && data.final.answers.length);
   const roadmapUrl = roadmapKey ? `../roadmap.html?track=${roadmapKey}` : "../roadmap.html";
+  const trackLessonFiles = {
+    w2: [
+      "w2-level-1.html",
+      "w2-level-2.html",
+      "w2-level-3.html",
+      "w2-level-4.html",
+      "w2-level-5.html"
+    ],
+    self1099: [
+      "self1099-level-1.html",
+      "self1099-level-2.html",
+      "self1099-level-3.html",
+      "self1099-level-4.html",
+      "self1099-level-5.html"
+    ],
+    investor1099b: [
+      "investor1099b-level-1.html",
+      "investor1099b-level-2.html",
+      "investor1099b-level-3.html",
+      "investor1099b-level-4.html",
+      "investor1099b-level-5.html"
+    ]
+  };
   const attackType = roadmapKey === "self1099" ? "fireball" : "sword";
   const dragonNameByTrack = {
     w2: "DRAGON OF THE W-2",
@@ -49,6 +99,14 @@
   if (topRoadmapLink) {
     topRoadmapLink.href = roadmapUrl;
   }
+
+  const user = await waitForCurrentUser();
+  if (!user) {
+    window.location.href = "../loginsignup/login.html";
+    return;
+  }
+
+  const progressKey = `${progressKeyBase}:${user.uid}`;
 
   el.track.textContent = data.track + " - " + data.level;
   el.title.textContent = data.title;
@@ -261,6 +319,23 @@
       return {};
     }
   };
+
+  const isLevelUnlocked = () => {
+    const files = trackLessonFiles[roadmapKey] || [];
+    const levelIndex = files.indexOf(data.file);
+    if (levelIndex <= 0) {
+      return true;
+    }
+
+    const progress = readProgress();
+    const previousFile = files[levelIndex - 1];
+    return Boolean(progress[previousFile] && progress[previousFile].completed);
+  };
+
+  if (!isLevelUnlocked()) {
+    window.location.href = roadmapUrl;
+    return;
+  }
 
   const saveProgress = (progress) => {
     try {

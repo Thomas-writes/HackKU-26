@@ -449,7 +449,7 @@ const pageHtml = (item) => `<!DOCTYPE html>
   </div>
 
   <script>window.LEVEL_DATA = ${JSON.stringify(item)};</script>
-  <script src="level-base.js"></script>
+  <script type="module" src="level-base.js"></script>
 </body>
 </html>`;
 

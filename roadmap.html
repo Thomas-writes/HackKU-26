@@ -157,11 +157,6 @@
 			cursor: pointer;
 		}
 
-		.header-links button.chip {
-			font-family: "Press Start 2P", cursive;
-			appearance: none;
-		}
-
 		.header-links .chip:hover,
 		.header-links .chip:focus-visible {
 			transform: translate(4px, 4px);
@@ -184,6 +179,8 @@
 		}
 
 		.roadmap {
+			--marker-size: 104px;
+			--marker-gap: 16px;
 			position: relative;
 			padding: 16px 6px 6px;
 			min-height: 560px;
@@ -386,8 +383,8 @@
 		.knight-marker {
 			position: absolute;
 			top: 50%;
-			width: 120px;
-			height: 120px;
+			width: var(--marker-size);
+			height: var(--marker-size);
 			object-fit: contain;
 			image-rendering: pixelated;
 			z-index: 5;
@@ -400,12 +397,17 @@
 
 		.lesson.left .knight-marker,
 		.lesson.center .knight-marker {
-			right: 210px;
+			left: calc(8% + min(310px, 90%) + var(--marker-gap));
 			transform: translateY(-50%);
 		}
 
+		.lesson.center .knight-marker {
+			left: auto;
+			right: calc(50% + 155px + var(--marker-gap));
+		}
+
 		.lesson.right .knight-marker {
-			left: 210px;
+			right: calc(8% + min(310px, 90%) + var(--marker-gap));
 			transform: translateY(-50%) scaleX(-1);
 		}
 
@@ -426,6 +428,11 @@
 		}
 
 		@media (max-width: 740px) {
+			.roadmap {
+				--marker-size: 76px;
+				--marker-gap: 8px;
+			}
+
 			.lesson.left,
 			.lesson.right,
 			.lesson.center {
@@ -434,11 +441,13 @@
 				padding-right: 0;
 			}
 
-			.lesson .knight-marker {
+			.lesson.left .knight-marker,
+			.lesson.right .knight-marker,
+			.lesson.center .knight-marker {
 				left: auto;
-				right: -96px;
-				width: 88px;
-				height: 88px;
+				right: calc(var(--marker-gap) * -1);
+				width: var(--marker-size);
+				height: var(--marker-size);
 				transform: translateY(-50%);
 			}
 
@@ -584,7 +593,6 @@
 					<p id="trackDescription">Learn to read your W-2, collect standard deductions, and file with confidence.</p>
 					<div class="chip-row" id="focusChips"></div>
 					<div class="header-links">
-						<button class="chip hub-link" id="backButton" type="button">Back</button>
 						<a class="chip hub-link" id="startTrackLink" href="levels/w2-level-1.html">Start Track Levels</a>
 						<a class="chip hub-link" id="backHomeLink" href="index.html">Back to Home</a>
 					</div>
@@ -665,7 +673,8 @@
 		];
 
 		const pattern = ["center", "left", "right", "left", "center", "right"];
-		const progressKey = "taxquest-progress-v1";
+		const progressKeyBase = "taxquest-progress-v1";
+		let progressKey = "";
 		const trackParam = new URLSearchParams(window.location.search).get("track");
 		let currentTrack = tracks.find((track) => track.key === trackParam) || tracks[0];
 
@@ -700,7 +709,6 @@
 		const lessonPrompt = document.getElementById("lessonPrompt");
 		const startTrackLink = document.getElementById("startTrackLink");
 		const backHomeLink = document.getElementById("backHomeLink");
-		const backButton = document.getElementById("backButton");
 		let isSignedIn = false;
 
 		const trackStartMap = {
@@ -710,6 +718,10 @@
 		};
 
 		function readProgress() {
+			if (!progressKey) {
+				return {};
+			}
+
 			try {
 				return JSON.parse(window.localStorage.getItem(progressKey) || "{}");
 			} catch (_err) {
@@ -762,7 +774,8 @@
 		}
 
 		function drawHeader() {
-			trackTitle.textContent = currentTrack.title || `${currentTrack.name.toUpperCase()} TRACK`;
+			const title = currentTrack.title || `${currentTrack.name.toUpperCase()} TRACK`;
+			trackTitle.textContent = title;
 			trackDescription.textContent = currentTrack.description;
 			startTrackLink.href = nextTrackUrl(currentTrack.key);
 			backHomeLink.href = "index.html";
@@ -773,7 +786,7 @@
 				chip.textContent = item;
 				focusChips.appendChild(chip);
 			});
-			document.title = `${currentTrack.title} | TaxQuest 8-Bit Roadmap`;
+			document.title = `${title} | TaxQuest 8-Bit Roadmap`;
 		}
 
 		function drawRoadmap() {
@@ -910,17 +923,11 @@
 			}
 		});
 
-		backButton.addEventListener("click", () => {
-			if (window.history.length > 1) {
-				window.history.back();
-				return;
-			}
-
-			window.location.href = "index.html";
-		});
-
 		onAuthStateChanged(auth, (user) => {
 			isSignedIn = Boolean(user);
+			progressKey = user ? `${progressKeyBase}:${user.uid}` : "";
+			drawHeader();
+			drawRoadmap();
 		});
 
 		window.addEventListener("resize", () => {
