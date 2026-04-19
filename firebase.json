@@ -1,0 +1,18 @@
+{
+  "hosting": {
+    "site": "hackku26",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      ".firebaserc",
+      ".git/**",
+      ".firebase/**",
+      ".vscode/**",
+      "node_modules/**",
+      "package-lock.json",
+      "package.json"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false
+  }
+}

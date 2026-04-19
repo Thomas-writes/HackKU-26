@@ -316,7 +316,8 @@
       getAuth,
       signInWithEmailAndPassword,
       GoogleAuthProvider,
-      signInWithPopup
+      getRedirectResult,
+      signInWithRedirect
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
@@ -335,6 +336,16 @@
     const form = document.getElementById('loginForm');
     const googleBtn = document.getElementById('googleLoginBtn');
     const message = document.getElementById('message');
+
+    getRedirectResult(auth)
+      .then((result) => {
+        if (result) {
+          window.location.href = '../index.html';
+        }
+      })
+      .catch((err) => {
+        message.textContent = err.message;
+      });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -357,8 +368,7 @@
 
       try {
         const provider = new GoogleAuthProvider();
-        await signInWithPopup(auth, provider);
-        window.location.href = '../index.html';
+        await signInWithRedirect(auth, provider);
       } catch (err) {
         message.textContent = err.message;
       }
