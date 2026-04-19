@@ -35,8 +35,16 @@
       : data.file.startsWith("investor1099b-")
         ? "investor1099b"
         : "";
+  const isFinalBossLevel = /-level-5\.html$/i.test(data.file || "");
+  const hasFinalSection = Boolean(data.final && Array.isArray(data.final.answers) && data.final.answers.length);
   const roadmapUrl = roadmapKey ? `../roadmap.html?track=${roadmapKey}` : "../roadmap.html";
   const attackType = roadmapKey === "self1099" ? "fireball" : "sword";
+  const dragonNameByTrack = {
+    w2: "DRAGON OF THE W-2",
+    self1099: "DRAGON OF THE 1099",
+    investor1099b: "DRAGON OF THE 1099-B"
+  };
+  const bossTitle = isFinalBossLevel ? (dragonNameByTrack[roadmapKey] || "DRAGON BOSS") : "BOSS GOBLIN";
 
   if (topRoadmapLink) {
     topRoadmapLink.href = roadmapUrl;
@@ -47,21 +55,27 @@
   el.intro.textContent = data.intro;
 
   const goblinHud = document.createElement("section");
-  goblinHud.className = "goblin-hud pixel-panel";
+  goblinHud.className = `goblin-hud pixel-panel${isFinalBossLevel ? " dragon-boss" : ""}`;
   goblinHud.innerHTML = `
     <div class="goblin-banner">
-      <p class="goblin-kicker">BOSS GOBLIN</p>
+      <p class="goblin-kicker">${bossTitle}</p>
     </div>
     <div class="goblin-battlefield">
       <div class="goblin-health" id="goblinHealth"></div>
-      <div class="goblin-art" id="goblinArt" aria-hidden="true">
+      <div class="${isFinalBossLevel ? "dragon-art" : "goblin-art"}" id="goblinArt" aria-hidden="true">
         <span class="goblin-flash"></span>
+        ${isFinalBossLevel
+          ? `
+        <img class="dragon-image" src="../imgs/dragon.png" alt="" aria-hidden="true" />
+        `
+          : `
         <span class="goblin-ear goblin-ear-left"></span>
         <span class="goblin-ear goblin-ear-right"></span>
         <span class="goblin-eye goblin-eye-left"></span>
         <span class="goblin-eye goblin-eye-right"></span>
         <span class="goblin-nose"></span>
         <span class="goblin-mouth"></span>
+        `}
       </div>
     </div>
   `;
@@ -92,14 +106,16 @@
 
   const steps = data.mcqs.map((question, index) => ({ type: "mcq", question, index }));
   const letters = ["A", "B", "C", "D"];
-  const totalHearts = steps.length + 1;
-  const normalizedFinalAnswers = (data.final.answers || []).map((answer) => String(answer || "").trim().toLowerCase().replace(/\$/g, "").replace(/,/g, "").replace(/\s+/g, " "));
-  const hintList = Array.isArray(data.final.hints) && data.final.hints.length
+  const totalHearts = steps.length + (hasFinalSection ? 1 : 0);
+  const normalizedFinalAnswers = hasFinalSection
+    ? (data.final.answers || []).map((answer) => String(answer || "").trim().toLowerCase().replace(/\$/g, "").replace(/,/g, "").replace(/\s+/g, " "))
+    : [];
+  const hintList = hasFinalSection && Array.isArray(data.final.hints) && data.final.hints.length
     ? data.final.hints.slice()
     : [
-        data.final.hint || "Read the line label carefully.",
+        hasFinalSection ? data.final.hint : "Review the question text carefully.",
         "Check the number directly from the document section.",
-        "Answer: " + (data.final.answers && data.final.answers[0] ? data.final.answers[0] : "")
+        "Answer: " + (hasFinalSection && data.final.answers && data.final.answers[0] ? data.final.answers[0] : "")
       ].filter(Boolean);
 
   let currentStepIndex = 0;
@@ -185,8 +201,7 @@
     fireball.style.left = `${startX}px`;
     fireball.style.top = `${startY}px`;
     fireball.innerHTML = `
-      <span class="goblin-fireball-core"></span>
-      <span class="goblin-fireball-trail"></span>
+      <img class="goblin-fireball-sprite" src="../imgs/fireball.svg" alt="" aria-hidden="true" />
     `;
     attackLayer.appendChild(fireball);
 
@@ -377,7 +392,8 @@
     questionFeedback.className = "feedback success";
     questionFeedback.innerHTML = `<strong>Correct.</strong> ${step.question.explain}`;
 
-    setPrimaryAction(currentStepIndex === steps.length - 1 ? "Proceed to Final" : "Next Question", false);
+    const completeLabel = data.next ? "Finish Level" : "Finish and Return";
+    setPrimaryAction(currentStepIndex === steps.length - 1 ? (hasFinalSection ? "Proceed to Final" : completeLabel) : "Next Question", false);
     questionAction.onclick = goNextStep;
   };
 
@@ -495,6 +511,16 @@
   const goNextStep = () => {
     currentStepIndex += 1;
     if (currentStepIndex >= steps.length) {
+      if (!hasFinalSection) {
+        markLevelCompleted();
+        questionFeedback.className = "feedback success";
+        questionFeedback.innerHTML = `<strong>Victory.</strong> ${bossTitle} defeated.`;
+        setPrimaryAction(data.next ? "Next Level" : "Back to Roadmap", false);
+        questionAction.onclick = () => {
+          window.location.href = data.next || roadmapUrl;
+        };
+        return;
+      }
       buildFinalCard();
       showFinalCard();
       return;
