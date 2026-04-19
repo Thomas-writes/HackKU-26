@@ -87,33 +87,21 @@
       width: 52px;
       height: 52px;
       border: var(--border);
+      box-shadow: var(--shadow);
       background: var(--dragon-fire);
-      position: relative;
-      flex-shrink: 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .brand-icon::before,
-    .brand-icon::after {
-      content: "";
-      position: absolute;
-      border: var(--border);
+    .brand-icon img {
+      width: 70%;
+      height: 70%;
+      object-fit: contain;
+      image-rendering: pixelated;
     }
 
-    .brand-icon::before {
-      width: 12px;
-      height: 12px;
-      right: 4px;
-      top: 4px;
-      background: var(--gold-coin);
-    }
-
-    .brand-icon::after {
-      width: 16px;
-      height: 16px;
-      left: 8px;
-      bottom: 8px;
-      background: var(--health-potion);
-    }
 
     .brand-text {
       font-size: 0.9rem;
@@ -573,10 +561,12 @@
   <div class="page">
     <header class="header panel">
       <div class="brand">
-        <div class="brand-icon" aria-hidden="true"></div>
+        <div class="brand-icon">
+          <img src="./imgs/file.png" alt="Tax Quest Icon">
+        </div>
         <div class="brand-text">
           Tax Quest
-          <span class="brand-sub">Making Taxes Legendary Since 2026</span>
+          <span class="brand-sub">Gamify your taxes</span>
         </div>
       </div>
       <div class="header-actions">
@@ -675,7 +665,7 @@
     </section>
 
     <footer class="footer panel">
-      Tax Quest - Home Base for Legendary Filers
+      Created by Molly, Spencer, and Thomas
     </footer>
   </div>
 
