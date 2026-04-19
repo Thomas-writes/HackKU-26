@@ -214,6 +214,24 @@
       color: var(--stone-gray);
     }
 
+    .auth-message {
+      min-height: 0;
+      padding: 0;
+    }
+
+    .auth-message:not(:empty) {
+      border: var(--border);
+      box-shadow: 4px 4px 0 var(--shadow-black);
+      background: var(--pixel-white);
+      color: var(--dragon-fire);
+      padding: 12px;
+      line-height: 1.6;
+    }
+
+    .auth-message.success:not(:empty) {
+      color: var(--health-potion);
+    }
+
     .helper a {
       color: var(--shadow-black);
     }
@@ -253,8 +271,13 @@
         </div>
 
         <div class="form-group">
-          <label>Password</label>
-          <input id="password" type="password" placeholder="Password" />
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Password" />
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm Password" />
         </div>
 
         <button class="btn" type="submit">Sign Up</button>
@@ -266,7 +289,7 @@
         </button>
       </form>
 
-      <p id="message" class="helper"></p>
+      <p id="message" class="helper auth-message" aria-live="polite"></p>
 
       <p class="helper">
         Already have an account? <a href="login.html">Log in</a>
@@ -285,12 +308,14 @@
       createUserWithEmailAndPassword,
       GoogleAuthProvider,
       getRedirectResult,
+      onAuthStateChanged,
+      signInWithPopup,
       signInWithRedirect
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAWNfkXZgU9F6qmiiVyUAFYKJ45g1DytT4",
-      authDomain: "hackku26.firebaseapp.com",
+      authDomain: window.location.hostname === "hackku26.web.app" ? "hackku26.web.app" : "hackku26.firebaseapp.com",
       projectId: "hackku26",
       storageBucket: "hackku26.firebasestorage.app",
       messagingSenderId: "866677744105",
@@ -305,40 +330,88 @@
     const googleBtn = document.getElementById('googleSignupBtn');
     const message = document.getElementById('message');
 
+    function formatAuthError(error) {
+      const code = error && error.code ? error.code : '';
+      const messages = {
+        'auth/email-already-in-use': 'An account already exists for that email.',
+        'auth/invalid-email': 'Enter a valid email address.',
+        'auth/missing-password': 'Enter a password.',
+        'auth/weak-password': 'Use a password with at least 6 characters.',
+        'auth/popup-closed-by-user': 'Google sign-in was closed before it finished.',
+        'auth/popup-blocked': 'Your browser blocked the Google sign-in popup. Trying redirect sign-in instead.',
+        'auth/cancelled-popup-request': 'Google sign-in was cancelled.',
+        'auth/account-exists-with-different-credential': 'An account already exists with this email. Try logging in another way.',
+        'auth/network-request-failed': 'Network error. Check your connection and try again.'
+      };
+
+      return messages[code] || 'Sign up failed. Please try again.';
+    }
+
+    function showMessage(text, type = 'error') {
+      message.textContent = text;
+      message.classList.toggle('success', type === 'success');
+    }
+
+    function clearMessage() {
+      message.textContent = '';
+      message.classList.remove('success');
+    }
+
     getRedirectResult(auth)
       .then((result) => {
-        if (result) {
+        if (result || auth.currentUser) {
           window.location.href = '../index.html';
         }
       })
       .catch((err) => {
-        message.textContent = err.message;
+        showMessage(formatAuthError(err));
       });
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = '../index.html';
+      }
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      message.textContent = '';
+      clearMessage();
+
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (password !== confirmPassword) {
+        showMessage('Passwords do not match.');
+        return;
+      }
 
       try {
         await createUserWithEmailAndPassword(
           auth,
           document.getElementById('email').value,
-          document.getElementById('password').value
+          password
         );
         window.location.href = '../index.html';
       } catch (err) {
-        message.textContent = err.message;
+        showMessage(formatAuthError(err));
       }
     });
 
     googleBtn.addEventListener('click', async () => {
-      message.textContent = '';
+      clearMessage();
 
       try {
         const provider = new GoogleAuthProvider();
-        await signInWithRedirect(auth, provider);
+        await signInWithPopup(auth, provider);
+        window.location.href = '../index.html';
       } catch (err) {
-        message.textContent = err.message;
+        if (err && err.code === 'auth/popup-blocked') {
+          const provider = new GoogleAuthProvider();
+          await signInWithRedirect(auth, provider);
+          return;
+        }
+
+        showMessage(formatAuthError(err));
       }
     });
   </script>

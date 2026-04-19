@@ -618,7 +618,7 @@
 
 		const firebaseConfig = {
 			apiKey: "AIzaSyAWNfkXZgU9F6qmiiVyUAFYKJ45g1DytT4",
-			authDomain: "hackku26.firebaseapp.com",
+			authDomain: window.location.hostname === "hackku26.web.app" ? "hackku26.web.app" : "hackku26.firebaseapp.com",
 			projectId: "hackku26",
 			storageBucket: "hackku26.firebasestorage.app",
 			messagingSenderId: "866677744105",
