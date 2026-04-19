@@ -745,6 +745,13 @@
       button.addEventListener('click', (e) => {
         const card = e.target.closest('.class-card');
         setSelected(card);
+        if (!auth.currentUser) {
+          openModal(
+            'SIGN IN REQUIRED',
+            'Log in or sign up before opening a roadmap.'
+          );
+          return;
+        }
         const track = e.currentTarget.dataset.track;
         window.location.href = `roadmap.html?track=${track}`;
       });

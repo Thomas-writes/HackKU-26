@@ -157,6 +157,11 @@
 			cursor: pointer;
 		}
 
+		.header-links button.chip {
+			font-family: "Press Start 2P", cursive;
+			appearance: none;
+		}
+
 		.header-links .chip:hover,
 		.header-links .chip:focus-visible {
 			transform: translate(4px, 4px);
@@ -579,6 +584,7 @@
 					<p id="trackDescription">Learn to read your W-2, collect standard deductions, and file with confidence.</p>
 					<div class="chip-row" id="focusChips"></div>
 					<div class="header-links">
+						<button class="chip hub-link" id="backButton" type="button">Back</button>
 						<a class="chip hub-link" id="startTrackLink" href="levels/w2-level-1.html">Start Track Levels</a>
 						<a class="chip hub-link" id="backHomeLink" href="index.html">Back to Home</a>
 					</div>
@@ -595,7 +601,25 @@
 		</section>
 	</div>
 
-	<script>
+	<script type="module">
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+		import {
+			getAuth,
+			onAuthStateChanged
+		} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+		const firebaseConfig = {
+			apiKey: "AIzaSyAWNfkXZgU9F6qmiiVyUAFYKJ45g1DytT4",
+			authDomain: "hackku26.firebaseapp.com",
+			projectId: "hackku26",
+			storageBucket: "hackku26.firebasestorage.app",
+			messagingSenderId: "866677744105",
+			appId: "1:866677744105:web:1278957a9058ac0f422b78",
+			measurementId: "G-5EJ4KBGBDG"
+		};
+
+		const app = initializeApp(firebaseConfig);
+		const auth = getAuth(app);
 		const tracks = [
 			{
 				key: "w2",
@@ -676,6 +700,8 @@
 		const lessonPrompt = document.getElementById("lessonPrompt");
 		const startTrackLink = document.getElementById("startTrackLink");
 		const backHomeLink = document.getElementById("backHomeLink");
+		const backButton = document.getElementById("backButton");
+		let isSignedIn = false;
 
 		const trackStartMap = {
 			w2: "levels/w2-level-1.html",
@@ -726,8 +752,17 @@
 			return urls[urls.length - 1] || trackStartMap[trackKey] || "levels/index.html";
 		}
 
+		function requireSignedIn() {
+			if (isSignedIn || auth.currentUser) {
+				return true;
+			}
+
+			lessonPrompt.textContent = "Log in or sign up before opening a roadmap level.";
+			return false;
+		}
+
 		function drawHeader() {
-			trackTitle.textContent = currentTrack.title;
+			trackTitle.textContent = currentTrack.title || `${currentTrack.name.toUpperCase()} TRACK`;
 			trackDescription.textContent = currentTrack.description;
 			startTrackLink.href = nextTrackUrl(currentTrack.key);
 			backHomeLink.href = "index.html";
@@ -771,6 +806,10 @@
 				`;
 
 				node.addEventListener("click", () => {
+					if (!requireSignedIn()) {
+						return;
+					}
+
 					if (state === "locked") {
 						lessonPrompt.textContent = "This lesson is locked. Beat the previous level first!";
 						return;
@@ -864,6 +903,25 @@
 		drawHeader();
 		drawRoadmap();
 		lessonPrompt.textContent = "Open lessons are gold. Completed lessons are green. Finish a level to unlock the next.";
+
+		startTrackLink.addEventListener("click", (event) => {
+			if (!requireSignedIn()) {
+				event.preventDefault();
+			}
+		});
+
+		backButton.addEventListener("click", () => {
+			if (window.history.length > 1) {
+				window.history.back();
+				return;
+			}
+
+			window.location.href = "index.html";
+		});
+
+		onAuthStateChanged(auth, (user) => {
+			isSignedIn = Boolean(user);
+		});
 
 		window.addEventListener("resize", () => {
 			renderWindingPath();
